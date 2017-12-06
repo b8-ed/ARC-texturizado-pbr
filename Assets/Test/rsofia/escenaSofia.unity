@@ -1359,7 +1359,18 @@ MonoBehaviour:
   m_Group: {fileID: 170018110}
   onValueChanged:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 2052451872}
+        m_MethodName: DisplayAlbedo
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
     m_TypeName: UnityEngine.UI.Toggle+ToggleEvent, UnityEngine.UI, Version=1.0.0.0,
       Culture=neutral, PublicKeyToken=null
   m_IsOn: 0
@@ -1644,7 +1655,18 @@ MonoBehaviour:
   m_Group: {fileID: 170018110}
   onValueChanged:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 2052451872}
+        m_MethodName: DisplayMetallic
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
     m_TypeName: UnityEngine.UI.Toggle+ToggleEvent, UnityEngine.UI, Version=1.0.0.0,
       Culture=neutral, PublicKeyToken=null
   m_IsOn: 0
@@ -1797,7 +1819,7 @@ GameObject:
   - component: {fileID: 632150398}
   - component: {fileID: 632150397}
   m_Layer: 0
-  m_Name: Sphere
+  m_Name: 3D Model
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1816,7 +1838,7 @@ MeshRenderer:
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
   m_Materials:
-  - {fileID: 2100000, guid: 91fa7302b7eed0740ac651866a7bf8e5, type: 2}
+  - {fileID: 1971019443, guid: 220643f4cc0baab469e45cf09a85d3d5, type: 3}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -3392,7 +3414,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.74944174, y: 0.124537945}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0.51000977, y: 0.6000004}
+  m_AnchoredPosition: {x: 0.51000977, y: 0.5999985}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1444411131
@@ -4615,7 +4637,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   target: {fileID: 632150396}
-  normal: {fileID: 2800000, guid: b05f42ca3f8b6e54eac2cfe5b081039a, type: 3}
 --- !u!4 &2052451873
 Transform:
   m_ObjectHideFlags: 0

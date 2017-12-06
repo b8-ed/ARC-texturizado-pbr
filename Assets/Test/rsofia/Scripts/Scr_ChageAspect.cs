@@ -9,22 +9,58 @@ using UnityEngine.SceneManagement;
 public class Scr_ChageAspect : MonoBehaviour
 {
     public GameObject target;
-    public Texture normal;
+    ProceduralMaterial substance;
+    Material baseMat;
+    Material normalMat;
+    Material metallicMat;
 
+    private void Start()
+    {
+        //substance = target.GetComponent<Renderer>().sharedMaterial as ProceduralMaterial;
+        //ProceduralMaterial.substanceProcessorUsage = ProceduralProcessorUsage.All;
+        //substance.CacheProceduralProperty("_BumpMap", true);
+        baseMat = target.GetComponent<Renderer>().material;
 
-	public void DisplayWireframe()
+        //Create Normal Mat
+        //Texture normalMap = target.GetComponent<Renderer>().material.GetTexture(Shader.PropertyToID("_BumpMap"));
+        //normalMat = new Material(Shader.Find("Standard"));
+        //normalMat.mainTexture = normalMap;
+        CreateMaterialFrom("_BumpMap", normalMat);
+
+        //Create Metallic Mat
+        //CreateMaterialFrom("_Shininess", normalMat);
+    }
+
+    void CreateMaterialFrom(string property, Material _toAssing)
+    {
+        _toAssing = new Material(Shader.Find("Standard"));
+        _toAssing.mainTexture = target.GetComponent<Renderer>().material.GetTexture(Shader.PropertyToID(property));
+    }
+
+    public void DisplayWireframe()
     {
         
     }
 
     public void DisplayAlbedo()
     {
-
+        target.GetComponent<Renderer>().material = baseMat;
     }
 
     public void DisplayNormal()
     {
-        target.GetComponent<Renderer>().material.SetTexture(Shader.PropertyToID("_MainTex"), normal);
+        //Texture normalTex = substance.GetTexture("_BumpMap") as Texture;
+        //substance.SetProceduralTexture("baseColor", (Texture2D)normalTex);
+        //substance.RebuildTextures();
+
+        Texture normalMap = target.GetComponent<Renderer>().material.GetTexture(Shader.PropertyToID("_BumpMap"));
+        ////target.GetComponent<Renderer>().material.SetTexture(Shader.PropertyToID("_MainTex"), normalMap);
+
+        ////Create new material to display Normal
+        Material normalMat = new Material(Shader.Find("Standard"));
+        ////normalMat.SetTextureScale("Tiling", new Vector2(100, 0));
+        normalMat.mainTexture = normalMap;
+        target.GetComponent<Renderer>().material = normalMat;
     }
 
     public void DisplayMetallic()
