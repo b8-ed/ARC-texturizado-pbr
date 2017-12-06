@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class CargaDeObjetos : MonoBehaviour {
 
-    GameObject[] modelos3D;
+    public GameObject[] modelos3D;
 
     public GameObject[] instanciaModelos3D;
     public int indiceObjetoActivo;
@@ -12,6 +12,7 @@ public class CargaDeObjetos : MonoBehaviour {
     void Start ()
     {
         CargarObjetos();
+        instanciaModelos3D = new GameObject[modelos3D.Length];
         CrearObjetos();
         ActivarObjetoActual();
 	}
@@ -32,11 +33,12 @@ public class CargaDeObjetos : MonoBehaviour {
     void CargarObjetos()
     {
         modelos3D = Resources.LoadAll<GameObject>("Modelos");
-        print(modelos3D.Length);
     }
     void CrearObjetos()
     {
-        for(int i = 0; i < modelos3D.Length; i++)
+        print(modelos3D.Length);
+
+        for (int i = 0; i < modelos3D.Length; i++)
         {
             instanciaModelos3D[i] = Instantiate(modelos3D[i], Vector3.zero, Quaternion.identity);
             instanciaModelos3D[i].gameObject.SetActive(false);
