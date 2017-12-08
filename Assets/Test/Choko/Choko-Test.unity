@@ -560,8 +560,10 @@ MonoBehaviour:
   KeyLight: {fileID: 811854211}
   FillLight: {fileID: 482991075}
   f_spotAngle: 30
-  RadioAlCentro: 15
+  f_range: 3
+  RadioAlCentro: 5
   f_AlturaSet: 0
+  rotation: 0
 --- !u!4 &1687980942
 Transform:
   m_ObjectHideFlags: 0
