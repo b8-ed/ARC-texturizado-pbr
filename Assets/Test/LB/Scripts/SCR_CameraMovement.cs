@@ -72,7 +72,6 @@ public class SCR_CameraMovement : MonoBehaviour {
             gameObject.transform.rotation = initialRot;
             GoTo(Vector3.zero);
             OnResetPressed();
-
             lastMousePos = Vector3.zero;
         }
     }
