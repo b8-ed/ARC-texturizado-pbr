@@ -43,19 +43,22 @@ public class Scr_Camara : MonoBehaviour {
         Modo = ModoCamara.INMOVIL;
         Cursor.visible = true;
         //currentCameraDistance = minZoomDistance + ((maxZoomDistance - minZoomDistance) / 2.0f);
-        if(objectToFollow.GetComponent<MeshRenderer>().bounds.extents.z  > objectToFollow.GetComponent<MeshRenderer>().bounds.extents.x)
-        {
-            minZoomDistance = objectToFollow.GetComponent<MeshRenderer>().bounds.extents.z+5.0f;
-        }
-        else
-        {
-            minZoomDistance = objectToFollow.GetComponent<MeshRenderer>().bounds.extents.x +5.0f;
-        }
         currentCameraDistance = minZoomDistance;
         lastMousePos = Vector3.zero;
     }
 
-    // Update is called once per frame
+    public void CalculateBounds()
+    {
+        if (objectToFollow.GetComponentInChildren<MeshRenderer>().bounds.extents.z > objectToFollow.GetComponentInChildren<MeshRenderer>().bounds.extents.x)
+        {
+            minZoomDistance = objectToFollow.GetComponentInChildren<MeshRenderer>().bounds.extents.z + 5.0f;
+        }
+        else
+        {
+            minZoomDistance = objectToFollow.GetComponentInChildren<MeshRenderer>().bounds.extents.x + 5.0f;
+        }
+    }
+
     void Update()
     {
         UpdateRotation();

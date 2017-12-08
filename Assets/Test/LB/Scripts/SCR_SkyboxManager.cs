@@ -33,5 +33,6 @@ public class SCR_SkyboxManager : MonoBehaviour {
             RenderSettings.skybox = MAT_Skybox;
         else
             RenderSettings.skybox = MAT_Gray;
+        DynamicGI.UpdateEnvironment();
     }
 }

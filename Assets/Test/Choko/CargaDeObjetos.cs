@@ -9,21 +9,22 @@ public class CargaDeObjetos : MonoBehaviour {
     public GameObject[] instanciaModelos3D;
     public int indiceObjetoActivo;
 
+    Scr_Camara scrCam;
+
     void Start ()
     {
+        scrCam = FindObjectOfType<Scr_Camara>();
         CargarObjetos();
         instanciaModelos3D = new GameObject[modelos3D.Length];
         CrearObjetos();
         ActivarObjetoActual();
 	}
-	void Update ()
-    {
-		
-	}
     
     void ActivarObjetoActual()
     {
         instanciaModelos3D[indiceObjetoActivo].gameObject.SetActive(true);
+        scrCam.objectToFollow = instanciaModelos3D[indiceObjetoActivo].gameObject;
+        scrCam.CalculateBounds();
     }
     void DesactivarObjetoActual()
     {
@@ -41,6 +42,7 @@ public class CargaDeObjetos : MonoBehaviour {
         for (int i = 0; i < modelos3D.Length; i++)
         {
             instanciaModelos3D[i] = Instantiate(modelos3D[i], Vector3.zero, Quaternion.identity);
+            instanciaModelos3D[i].AddComponent<SCR_ObjectView>();
             instanciaModelos3D[i].gameObject.SetActive(false);
         }
     }
