@@ -8,6 +8,8 @@ public class Iluminacion : MonoBehaviour {
     public Light KeyLight;
     public Light FillLight;
 
+    public float intencidad;
+
     public float f_spotAngle;
     public float f_range;
 
@@ -16,27 +18,76 @@ public class Iluminacion : MonoBehaviour {
     public float f_AlturaSet;
     public float rotation;
 
-    void Start ()
+
+    //Variables de color de luces
+    public Color32[] ColorBackLight;
+    public Color32[] ColorKeyLight;
+    public Color32[] ColorFillLight;
+
+    //
+
+    public Color32 ColorLibreBackLight;
+    public Color32 ColorLibreKeyLight;
+    public Color32 ColorLibreFillLight;
+
+    bool cambioColor;
+
+    void Start()
     {
         Triangular();
         CambiarLucesADireccional();
-        
+
+        ColorBackLight = new Color32[3];
+        ColorKeyLight = new Color32[3];
+        ColorFillLight = new Color32[3];
+
+
+        //3 sets de colores en triadas
+        //https://color.adobe.com/
+
+        ColorBackLight[0] = new Color32(25, 255, 99, 255);
+        ColorBackLight[1] = new Color32(0, 237, 255, 255);
+        ColorBackLight[2] = new Color32(18, 37, 178, 255);
+
+        ColorKeyLight[0] = new Color32(92, 9, 178, 255);
+        ColorKeyLight[1] = new Color32(178, 9, 110, 255);
+        ColorKeyLight[2] = new Color32(255, 70, 0, 255);
+
+        ColorFillLight[0] = new Color32(255, 152, 0, 255);
+        ColorFillLight[1] = new Color32(255, 221, 0, 255);
+        ColorFillLight[2] = new Color32(75, 178, 9, 255);
+
+        ColorLibreBackLight = Color.white;
+        ColorLibreFillLight = Color.white;
+        ColorLibreKeyLight = Color.white;
+
+        cambioColor = false;
+
     }
 
     void Update ()
     {
-        if (Input.GetKeyDown(KeyCode.A))
+        if (Input.GetKeyDown(KeyCode.A))//cambia las luces a direccional
             CambiarLucesADireccional();
-        if (Input.GetKeyDown(KeyCode.S))
+        if (Input.GetKeyDown(KeyCode.S))//cambia las luces a point
             CambiarLucesAPoint();
-        if (Input.GetKeyDown(KeyCode.Q))
+        if (Input.GetKeyDown(KeyCode.Q)) //apaga la key light
             ApagarKeyLight();
-        if (Input.GetKeyDown(KeyCode.W))
+        if (Input.GetKeyDown(KeyCode.W)) //apaga la back light
             ApagarBackLight();
-        if (Input.GetKeyDown(KeyCode.E))
+        if (Input.GetKeyDown(KeyCode.E)) // apaga la fill light
             ApagarFillLightt();
 
-        SeguirObjeto();
+        if (Input.GetKeyDown(KeyCode.U))
+            TriadaAlphaDeColoresLuces();
+        if (Input.GetKeyDown(KeyCode.I))
+            TriadaBetaDeColoresLuces();
+        if (Input.GetKeyDown(KeyCode.O))
+            TriadaGamaDeColoresLuces();
+        if (Input.GetKeyDown(KeyCode.P))
+            SeleccionDeColorLibre();
+
+            SeguirObjeto();
     }
 
   
@@ -116,6 +167,50 @@ public class Iluminacion : MonoBehaviour {
         FillLight.range = f_range;
 
         Triangular();
+
+        if(cambioColor)
+            CambioDeColorLibre();
     }
 
+    //activar Triada de color 1
+    void TriadaAlphaDeColoresLuces()
+    {
+        cambioColor = false;
+
+        BackLight.color = ColorBackLight[0];
+        FillLight.color = ColorFillLight[0];
+        KeyLight.color = ColorKeyLight[0];
+    }
+    //activar Triada de color 2
+    void TriadaBetaDeColoresLuces()
+    {
+        cambioColor = false;
+
+        BackLight.color = ColorBackLight[1];
+        FillLight.color = ColorFillLight[1];
+        KeyLight.color = ColorKeyLight[1];
+    }
+    //activar Triada de color 3
+    void TriadaGamaDeColoresLuces()
+    {
+        cambioColor = false;
+
+        BackLight.color = ColorBackLight[2];
+        FillLight.color = ColorFillLight[2];
+        KeyLight.color = ColorKeyLight[2];
+
+    }
+
+    //activar Seleccion de Color Libre
+    void SeleccionDeColorLibre()
+    {
+        cambioColor = true;
+    }
+
+    void CambioDeColorLibre()
+    {
+        BackLight.color = ColorLibreBackLight;
+        FillLight.color = ColorLibreFillLight;
+        KeyLight.color = ColorLibreKeyLight;
+    }
 }
