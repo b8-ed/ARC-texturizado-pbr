@@ -52,3 +52,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   target: {fileID: 0}
+  propertyHolderTogglePrefab: {fileID: 1093432976900780, guid: ab084d0d295c1ed4788f642ad859ba37,
+    type: 2}
+  propertyHoldeSliderPrefab: {fileID: 1186489591049308, guid: 56d8a9368975acd44988a3ff137e0a64,
+    type: 2}
+  propertyParent: {fileID: 0}
