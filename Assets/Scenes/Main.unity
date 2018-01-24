@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.44657868, g: 0.49641263, b: 0.57481706, a: 1}
+  m_IndirectSpecularColor: {r: 0.44657844, g: 0.49641222, b: 0.57481694, a: 1}
 --- !u!157 &3
 LightmapSettings:
   m_ObjectHideFlags: 0
@@ -367,6 +367,26 @@ Prefab:
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.size
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 114390868163413318, guid: e0578fcca291d714d9d83aa306e91117,
+        type: 2}
+      propertyPath: onValueChanged.m_PersistentCalls.m_Calls.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 114545570273779776, guid: e0578fcca291d714d9d83aa306e91117,
+        type: 2}
+      propertyPath: onValueChanged.m_PersistentCalls.m_Calls.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 114905379510472398, guid: e0578fcca291d714d9d83aa306e91117,
+        type: 2}
+      propertyPath: m_OnValueChanged.m_PersistentCalls.m_Calls.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 114200879879307890, guid: e0578fcca291d714d9d83aa306e91117,
+        type: 2}
+      propertyPath: m_OnValueChanged.m_PersistentCalls.m_Calls.Array.size
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 224693330763298480, guid: e0578fcca291d714d9d83aa306e91117,
         type: 2}
       propertyPath: m_LocalPosition.x
@@ -568,27 +588,27 @@ Prefab:
     - target: {fileID: 224833423582683932, guid: e0578fcca291d714d9d83aa306e91117,
         type: 2}
       propertyPath: m_AnchoredPosition.y
-      value: -32
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 224407850553944460, guid: e0578fcca291d714d9d83aa306e91117,
         type: 2}
       propertyPath: m_AnchoredPosition.y
-      value: -32
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 224532015987444934, guid: e0578fcca291d714d9d83aa306e91117,
         type: 2}
       propertyPath: m_AnchoredPosition.y
-      value: -32
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 224327415276878178, guid: e0578fcca291d714d9d83aa306e91117,
         type: 2}
       propertyPath: m_AnchoredPosition.y
-      value: -32
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 224278105289991534, guid: e0578fcca291d714d9d83aa306e91117,
         type: 2}
       propertyPath: m_AnchoredPosition.y
-      value: -32
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 114457093759865014, guid: e0578fcca291d714d9d83aa306e91117,
         type: 2}
@@ -723,6 +743,110 @@ Prefab:
     - target: {fileID: 114486112182378220, guid: e0578fcca291d714d9d83aa306e91117,
         type: 2}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
+      value: UnityEngine.Object, UnityEngine
+      objectReference: {fileID: 0}
+    - target: {fileID: 1716189112987744, guid: e0578fcca291d714d9d83aa306e91117, type: 2}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 114390868163413318, guid: e0578fcca291d714d9d83aa306e91117,
+        type: 2}
+      propertyPath: onValueChanged.m_PersistentCalls.m_Calls.Array.data[0].m_Mode
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 114390868163413318, guid: e0578fcca291d714d9d83aa306e91117,
+        type: 2}
+      propertyPath: onValueChanged.m_PersistentCalls.m_Calls.Array.data[0].m_CallState
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 114545570273779776, guid: e0578fcca291d714d9d83aa306e91117,
+        type: 2}
+      propertyPath: onValueChanged.m_PersistentCalls.m_Calls.Array.data[0].m_Mode
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 114545570273779776, guid: e0578fcca291d714d9d83aa306e91117,
+        type: 2}
+      propertyPath: onValueChanged.m_PersistentCalls.m_Calls.Array.data[0].m_CallState
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 114545570273779776, guid: e0578fcca291d714d9d83aa306e91117,
+        type: 2}
+      propertyPath: onValueChanged.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 995280645}
+    - target: {fileID: 114545570273779776, guid: e0578fcca291d714d9d83aa306e91117,
+        type: 2}
+      propertyPath: onValueChanged.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: ChangeSkybox
+      objectReference: {fileID: 0}
+    - target: {fileID: 114545570273779776, guid: e0578fcca291d714d9d83aa306e91117,
+        type: 2}
+      propertyPath: onValueChanged.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
+      value: UnityEngine.Object, UnityEngine
+      objectReference: {fileID: 0}
+    - target: {fileID: 114905379510472398, guid: e0578fcca291d714d9d83aa306e91117,
+        type: 2}
+      propertyPath: m_Options.m_Options.Array.data[0].m_Text
+      value: Default
+      objectReference: {fileID: 0}
+    - target: {fileID: 114905379510472398, guid: e0578fcca291d714d9d83aa306e91117,
+        type: 2}
+      propertyPath: m_Options.m_Options.Array.data[1].m_Text
+      value: Skybox A
+      objectReference: {fileID: 0}
+    - target: {fileID: 114905379510472398, guid: e0578fcca291d714d9d83aa306e91117,
+        type: 2}
+      propertyPath: m_Options.m_Options.Array.data[2].m_Text
+      value: Skybox B
+      objectReference: {fileID: 0}
+    - target: {fileID: 114905379510472398, guid: e0578fcca291d714d9d83aa306e91117,
+        type: 2}
+      propertyPath: m_OnValueChanged.m_PersistentCalls.m_Calls.Array.data[0].m_Mode
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 114905379510472398, guid: e0578fcca291d714d9d83aa306e91117,
+        type: 2}
+      propertyPath: m_OnValueChanged.m_PersistentCalls.m_Calls.Array.data[0].m_CallState
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 114905379510472398, guid: e0578fcca291d714d9d83aa306e91117,
+        type: 2}
+      propertyPath: m_OnValueChanged.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 995280645}
+    - target: {fileID: 114905379510472398, guid: e0578fcca291d714d9d83aa306e91117,
+        type: 2}
+      propertyPath: m_OnValueChanged.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: SetSkybox
+      objectReference: {fileID: 0}
+    - target: {fileID: 114905379510472398, guid: e0578fcca291d714d9d83aa306e91117,
+        type: 2}
+      propertyPath: m_OnValueChanged.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
+      value: UnityEngine.Object, UnityEngine
+      objectReference: {fileID: 0}
+    - target: {fileID: 114200879879307890, guid: e0578fcca291d714d9d83aa306e91117,
+        type: 2}
+      propertyPath: m_OnValueChanged.m_PersistentCalls.m_Calls.Array.data[0].m_Mode
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 114200879879307890, guid: e0578fcca291d714d9d83aa306e91117,
+        type: 2}
+      propertyPath: m_OnValueChanged.m_PersistentCalls.m_Calls.Array.data[0].m_CallState
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 114200879879307890, guid: e0578fcca291d714d9d83aa306e91117,
+        type: 2}
+      propertyPath: m_OnValueChanged.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 995280645}
+    - target: {fileID: 114200879879307890, guid: e0578fcca291d714d9d83aa306e91117,
+        type: 2}
+      propertyPath: m_OnValueChanged.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: RotateSkybox
+      objectReference: {fileID: 0}
+    - target: {fileID: 114200879879307890, guid: e0578fcca291d714d9d83aa306e91117,
+        type: 2}
+      propertyPath: m_OnValueChanged.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
       value: UnityEngine.Object, UnityEngine
       objectReference: {fileID: 0}
     m_RemovedComponents: []
@@ -925,7 +1049,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3217c55fdc6bc5f4296a665adb700ef8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  MAT_Skybox: {fileID: 0}
+  MAT_Skybox:
+  - {fileID: 2100000, guid: b22d7be7b41d68745aecdfce4c70c426, type: 2}
+  - {fileID: 2100000, guid: 794eb5f8516828240b12c676f5aac8c3, type: 2}
+  - {fileID: 2100000, guid: fb3b9b55c01d2194c816b2d469854e16, type: 2}
   MAT_Gray: {fileID: 2100000, guid: 2d4fb17aadfe51740857383d5bd9d397, type: 2}
 --- !u!1 &1076607934
 GameObject:

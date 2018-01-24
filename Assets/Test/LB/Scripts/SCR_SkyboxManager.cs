@@ -7,16 +7,28 @@ using UnityEngine;
 
 public class SCR_SkyboxManager : MonoBehaviour {
 
-    public Material MAT_Skybox;
+    public Material [] MAT_Skybox;
     public Material MAT_Gray;
 
+    private int localIndex = 0;
     private bool isSkyboxOn = true;
 
 	void Start () 
 	{
-        MAT_Skybox = RenderSettings.skybox;
+        MAT_Skybox[0] = RenderSettings.skybox;
 	}
 	
+    public void SetSkybox(int index)
+    {
+        localIndex = index;
+        RenderSettings.skybox = MAT_Skybox[index];
+    }
+
+    public void RotateSkybox(float value)
+    {
+        RenderSettings.skybox.SetFloat("_Rotation", value * 360);
+    }
+
 	void Update () 
 	{
         if (Input.GetKeyDown(KeyCode.Space))
@@ -30,7 +42,7 @@ public class SCR_SkyboxManager : MonoBehaviour {
         isSkyboxOn = !isSkyboxOn;
 
         if (isSkyboxOn)
-            RenderSettings.skybox = MAT_Skybox;
+            RenderSettings.skybox = MAT_Skybox[localIndex];
         else
             RenderSettings.skybox = MAT_Gray;
         DynamicGI.UpdateEnvironment();
