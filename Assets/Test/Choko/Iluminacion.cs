@@ -8,7 +8,17 @@ public class Iluminacion : MonoBehaviour {
     public Light KeyLight;
     public Light FillLight;
 
-    public float intencidad;
+    public Slider SliderBackLight;
+    public Slider SliderKeyLight;
+    public Slider SliderFillLight;
+
+    [Range(0.0f,1.0f)]
+    public float IntencidadBackLight;
+    [Range(0.0f, 1.0f)]
+    public float IntencidadKeyLight;
+    [Range(0.0f, 1.0f)]
+    public float IntencidadFillLight;
+
 
     public float f_spotAngle;
     public float f_range;
@@ -34,6 +44,14 @@ public class Iluminacion : MonoBehaviour {
 
     void Start()
     {
+        SliderBackLight.value = 1.0f;
+        SliderFillLight.value = 0.7f;
+        SliderKeyLight.value = 0.3f;
+
+        IntencidadBackLight = SliderBackLight.value;
+        IntencidadFillLight = SliderFillLight.value;
+        IntencidadKeyLight = SliderKeyLight.value;
+
         Triangular();
         CambiarLucesADireccional();
 
@@ -62,6 +80,8 @@ public class Iluminacion : MonoBehaviour {
         ColorLibreKeyLight = Color.white;
 
         cambioColor = false;
+
+        
 
     }
 
@@ -168,7 +188,9 @@ public class Iluminacion : MonoBehaviour {
 
         Triangular();
 
-        if(cambioColor)
+        CambioDeIntencidad();
+
+        if (cambioColor)
             CambioDeColorLibre();
     }
 
@@ -212,5 +234,27 @@ public class Iluminacion : MonoBehaviour {
         BackLight.color = ColorLibreBackLight;
         FillLight.color = ColorLibreFillLight;
         KeyLight.color = ColorLibreKeyLight;
+    }
+
+    //Cambia La Intencidad De las Luces en vace a los valores de las variables
+    void CambioDeIntencidad()
+    {
+        BackLight.intensity = IntencidadBackLight;
+        FillLight.intensity = IntencidadFillLight;
+        KeyLight.intensity = IntencidadKeyLight;
+    }
+
+    public void ControladorDeIntencidadSliderBackLight()
+    {
+        IntencidadBackLight = SliderBackLight.value;
+    }
+
+    public void ControladorDeIntencidadSliderFillLight()
+    {
+        IntencidadFillLight = SliderFillLight.value;
+    }
+    public void ControladorDeIntencidadSliderKeyLight()
+    {
+        IntencidadKeyLight = SliderKeyLight.value;
     }
 }
