@@ -199,7 +199,6 @@ GameObject:
   m_Component:
   - component: {fileID: 719173720}
   - component: {fileID: 719173719}
-  - component: {fileID: 719173721}
   m_Layer: 0
   m_Name: Directional Light
   m_TagString: Untagged
@@ -256,19 +255,6 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 50, y: -30, z: 0}
---- !u!114 &719173721
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 719173718}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d25608dc1619040429d8c865a5a9be82, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  obj: {fileID: 112009324}
-  radio: 10
 --- !u!1 &1300427218
 GameObject:
   m_ObjectHideFlags: 0
@@ -281,7 +267,6 @@ GameObject:
   - component: {fileID: 1300427221}
   - component: {fileID: 1300427220}
   - component: {fileID: 1300427219}
-  - component: {fileID: 1300427224}
   - component: {fileID: 1300427225}
   m_Layer: 0
   m_Name: Main Camera
@@ -360,37 +345,6 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1300427224
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 1300427218}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 41f11e4b9d7bc6843afea6a8816ca45a, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  axes: 0
-  sensitivityX: 15
-  sensitivityY: 15
-  minimumX: -360
-  maximumX: 360
-  minimumY: -60
-  maximumY: 60
-  panSpeed: 15
-  zoomSpeed: 100
-  rotationSpeed: 50
-  mousePanMultiplier: 0.1
-  mouseRotationMultiplier: 0.2
-  mouseZoomMultiplier: 5
-  minZoomDistance: 20
-  maxZoomDistance: 200
-  smoothingFactor: 0.1
-  correctZoomingOutRatio: 1
-  smoothing: 1
-  objectToFollow: {fileID: 112009324}
-  goToSpeed: 0.1
 --- !u!114 &1300427225
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -402,15 +356,22 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dc2f9e9dc26bb1c4487dd04e6ac41dc3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  zoomSpeed: 100
+  zoomSpeed: 10
   rotationSpeed: 50
   mouseRotationMultiplier: 0.2
   mouseZoomMultiplier: 5
   minZoomDistance: 20
-  maxZoomDistance: 200
+  maxZoomDistance: 100
   correctZoomingOutRatio: 0
   objectToFollow: {fileID: 112009324}
   goToSpeed: 0.1
+  cameraTarget: {x: 0, y: 0, z: 0}
+  currentCameraDistance: 0
+  goingToCameraTarget: {x: 0, y: 0, z: 0}
+  doingAutoMovement: 0
+  lastMousePos: {x: 0, y: 0, z: 0}
   minOchenta: 10
   Modo: 0
   Lado: 0
+  PosIn: {x: 0, y: 0, z: 0}
+  RotIn: {x: 0, y: 0, z: 0, w: 0}

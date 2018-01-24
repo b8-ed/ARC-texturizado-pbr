@@ -8,7 +8,7 @@ public class Scr_Camara : MonoBehaviour {
     public enum ModoCamara {INMOVIL,USUARIO_MOVIENDO , ORBITAR }
 
     [Header("Velocidades")]
-    public float zoomSpeed = 100.0f;
+    public float zoomSpeed = 10.0f;
     public float rotationSpeed = 50.0f;
 
     [Header("Velocidad Mouse")]
@@ -16,8 +16,8 @@ public class Scr_Camara : MonoBehaviour {
     public float mouseZoomMultiplier = 5.0f;
 
     [Header("Limites")]
-    public float minZoomDistance = 0.0f;
-    public float maxZoomDistance = 100.0f;
+    public float minZoomDistance = 10.0f;
+    public float maxZoomDistance = 50.0f;
 
     public bool correctZoomingOutRatio = true;
     /// <summary>
@@ -25,28 +25,67 @@ public class Scr_Camara : MonoBehaviour {
     /// </summary>
     public GameObject objectToFollow;
     public float goToSpeed = 0.1f;
-    private Vector3 cameraTarget;
+    public Vector3 cameraTarget;
 
-    private float currentCameraDistance;
-    private Vector3 goingToCameraTarget = Vector3.zero;
-    private bool doingAutoMovement = false;
-    private Vector3 lastMousePos;
-
-
+    public float currentCameraDistance;
+    public Vector3 goingToCameraTarget = Vector3.zero;
+    public bool doingAutoMovement = false;
+    public Vector3 lastMousePos;
     public float minOchenta=10;
     public ModoCamara Modo= ModoCamara.INMOVIL;
     [Range(-0.5f,0.5f)]
     public float Lado=0;
+
+
+    //
+    public Vector3 PosIn;
+    public Quaternion RotIn;
 
     void Start()
     {
         Modo = ModoCamara.INMOVIL;
         Cursor.visible = true;
         //currentCameraDistance = minZoomDistance + ((maxZoomDistance - minZoomDistance) / 2.0f);
+        zoomSpeed = 10.0f;
+        rotationSpeed = 50.0f;
+        mouseRotationMultiplier = 0.2f;
+        mouseZoomMultiplier = 5.0f;
+
+        Lado = 0;
+        minZoomDistance = 10.0f;
+        maxZoomDistance = 50.0f;
         currentCameraDistance = minZoomDistance;
         lastMousePos = Vector3.zero;
-    }
 
+        PosIn = transform.position;
+        RotIn = transform.rotation;
+
+    }
+    public void Fn_SetOrbitar(int _lado)
+    {
+        Modo = ModoCamara.ORBITAR;
+        Lado = _lado;
+    }
+    public void Fn_ZoomIn()
+    {
+        currentCameraDistance += 5.0f;
+    }
+    public void Fn_ZoomOut()
+    {
+        currentCameraDistance -= 5.0f;
+    }
+    public void Fn_Default()
+    {
+        Modo = ModoCamara.INMOVIL;
+        Lado = 0.0f;
+        minOchenta = 10;
+        lastMousePos = Vector3.zero;
+        transform.position= PosIn;
+        transform.rotation= RotIn;
+        currentCameraDistance = minZoomDistance;
+        minZoomDistance = 10.0f;
+        maxZoomDistance = 50.0f;
+    }
     public void CalculateBounds()
     {
         if (objectToFollow.GetComponentInChildren<MeshRenderer>().bounds.extents.z > objectToFollow.GetComponentInChildren<MeshRenderer>().bounds.extents.x)
@@ -129,11 +168,13 @@ public class Scr_Camara : MonoBehaviour {
          }*/
 
         //Scroll con mouse
-        float scroll = Input.GetAxis("Mouse ScrollWheel");
+        float scroll =Input.GetAxis("Mouse ScrollWheel");
         deltaZoom -= scroll * mouseZoomMultiplier;
 
         float zoomedOutRatio = correctZoomingOutRatio ? (currentCameraDistance - minZoomDistance) / (maxZoomDistance - minZoomDistance) : 0.0f;
         currentCameraDistance = Mathf.Max(minZoomDistance, Mathf.Min(maxZoomDistance, currentCameraDistance + deltaZoom * Time.deltaTime * zoomSpeed * (zoomedOutRatio * 2.0f + 1.0f)));
+        currentCameraDistance = Mathf.Clamp(currentCameraDistance, minZoomDistance, maxZoomDistance);
+
     }
 
     private void UpdatePosition()
