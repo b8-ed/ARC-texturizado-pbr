@@ -12,8 +12,10 @@ public class Scr_ChageAspect : MonoBehaviour
     public GameObject target;
     ProceduralMaterial substance;
     Material baseMat;
+    Material albedoMat;
     Material normalMat;
-    Material metallicMat;
+    Material metallicSpecMat; //this works to save both metallic and specular materials, depending on workflow
+    Material roughnessGlossinessMat; //works for both workflows
 
     [Tooltip("This is a panel with a text and a slider to display a substance property")]
     public GameObject propertyHolderTogglePrefab;
@@ -21,21 +23,55 @@ public class Scr_ChageAspect : MonoBehaviour
     [Tooltip("Child of canvas where the material properties will be displayed")]
     public GameObject propertyParent;
 
+    private bool isMetallicWorkflow = false;
+
+    [Header("UI")]
+    public GameObject specularTggl;
+    public GameObject metallicTggl;
+    public GameObject roughnessTggl;
+    public GameObject glossinessTggl;
+
+    private bool displayAspect = false;
+
+    public enum MapOptions
+    {
+        _0_NONE,
+        _1_ALBEDO,
+        _2_NORMAL,
+        _3_METALLIC_SPECULAR,
+        _4_ROUGH_GLOSS
+    }
+
     private void Start()
     {
         substance = target.GetComponent<Renderer>().sharedMaterial as ProceduralMaterial;
         ProceduralMaterial.substanceProcessorUsage = ProceduralProcessorUsage.All;
         substance.CacheProceduralProperty("_MainTex", true);
 
-        //Guardar el material normal
+        //Display Material Name
+        DisplayMaterialName();
+
+        //Guardar el material 
         baseMat = target.GetComponent<Renderer>().material;
 
+        //Creaete albedo Mat
+        CreateMaterialFrom("_MainTex", out albedoMat);
+
         //Create Normal Mat
-        CreateMaterialFrom("_BumpMap", out normalMat);
+        CreateMaterialFrom("_BumpMap", out normalMat); //_BumpMap
 
-        //Create Metallic Mat
-        //CreateMaterialFrom("_Shininess", normalMat);
+        if (isMetallicWorkflow)
+        {
+            //Create Metallic Mat
+            CreateMaterialFrom("_MetallicGlossMap", out metallicSpecMat);
+        }
+        else
+        {
+            CreateMaterialFrom("_SpecGlossMap", out metallicSpecMat);
+        }
+        
 
+        
 
         DisplaySubstanceMaterialProperties();
     }
@@ -45,27 +81,43 @@ public class Scr_ChageAspect : MonoBehaviour
         _toAssing = new Material(Shader.Find("Standard"));
         _toAssing.mainTexture = target.GetComponent<Renderer>().material.GetTexture(Shader.PropertyToID(property));
     }
+
+    public void DisplayMap(int option)
+    {
+        MapOptions map = (MapOptions)option;
+       
+        if(displayAspect)
+        {
+            switch (map)
+            {
+                case MapOptions._1_ALBEDO:
+                    target.GetComponent<Renderer>().material = albedoMat;
+                    break;
+                case MapOptions._2_NORMAL:
+                    target.GetComponent<Renderer>().material = normalMat;
+                    break;
+                case MapOptions._3_METALLIC_SPECULAR:
+                    target.GetComponent<Renderer>().material = metallicSpecMat;
+                    break;
+                case MapOptions._4_ROUGH_GLOSS:
+                    target.GetComponent<Renderer>().material = roughnessGlossinessMat;
+                    break;
+            }
+        }
+        
+    }
     
-
-    public void DisplayAlbedo()
+    public void DisplaySusbtanceMaterial()
     {
-        target.GetComponent<Renderer>().material = baseMat;
-    }
-
-    public void DisplayNormal()
-    {
-        //Asignar el material de normal
-        target.GetComponent<Renderer>().material = normalMat;
-    }
-
-    public void DisplayMetallic()
-    {
-
-    }
-
-    public void DisplayRoughness()
-    {
-
+        if (!displayAspect)
+        {
+            displayAspect = true;
+        }
+        else
+        {
+            target.GetComponent<Renderer>().material = baseMat;
+            displayAspect = false;
+        }
     }
 
     public void ResizeTextures(Dropdown dropdownResize)
@@ -111,7 +163,7 @@ public class Scr_ChageAspect : MonoBehaviour
         float inputFloat = substance.GetProceduralFloat(input.name);
         float oldInputFloat = inputFloat;
 
-        print("VALUE CHANGED!" + inputFloat + " SLIDER VAL " + slider.value);
+        //print("VALUE CHANGED!" + inputFloat + " SLIDER VAL " + slider.value);
         inputFloat = slider.value;//GUILayout.HorizontalSlider(inputFloat, input.minimum, input.maximum);
         if (inputFloat != oldInputFloat)
         {
@@ -128,6 +180,7 @@ public class Scr_ChageAspect : MonoBehaviour
         {
             ProceduralPropertyDescription input = inputs[i];
             ProceduralPropertyType type = input.type;
+            //Para variables booleanas
             if (type == ProceduralPropertyType.Boolean)
             {
                 GameObject holder = GameObject.Instantiate(propertyHolderTogglePrefab, propertyParent.transform);
@@ -135,6 +188,7 @@ public class Scr_ChageAspect : MonoBehaviour
                 holder.GetComponentInChildren<Toggle>().onValueChanged.AddListener(delegate { ToggleSubtanceProperty(input.name); });
 
             }
+            //Para variables expuestas flotantes
             else if (type == ProceduralPropertyType.Float)
                 if (input.hasRange)
                 {
@@ -193,5 +247,33 @@ public class Scr_ChageAspect : MonoBehaviour
         }
         substance.RebuildTextures();
 
+    }
+
+    void DisplayMaterialName()
+    {
+        if(propertyParent != null)
+        {
+            string workflow = "SG";
+            specularTggl.SetActive(true);
+            glossinessTggl.SetActive(true);
+            metallicTggl.SetActive(false);
+            roughnessTggl.SetActive(false);
+            //Check the workflow from the shader name
+            //For Specular its Standard Specular
+            //For metallic its Standard
+            if (substance.shader.name =="Standard")
+            {
+                workflow = "MR";
+                isMetallicWorkflow = true;
+
+                specularTggl.SetActive(false);
+                glossinessTggl.SetActive(false);
+                metallicTggl.SetActive(true);
+                roughnessTggl.SetActive(true);
+            }
+
+            propertyParent.transform.Find("txtTitulo").GetComponent<Text>().text = workflow + ": " + substance.name;
+        }
+        
     }
 }
