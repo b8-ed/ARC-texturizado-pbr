@@ -16,6 +16,9 @@ public class Scr_ChageAspect : MonoBehaviour
     Material normalMat;
     Material metallicSpecMat; //this works to save both metallic and specular materials, depending on workflow
     Material roughnessGlossinessMat; //works for both workflows
+    Material heightMat;
+    Material alphaMat;
+    Material emissionMat;
 
     [Tooltip("This is a panel with a text and a slider to display a substance property")]
     public GameObject propertyHolderTogglePrefab;
@@ -39,7 +42,10 @@ public class Scr_ChageAspect : MonoBehaviour
         _1_ALBEDO,
         _2_NORMAL,
         _3_METALLIC_SPECULAR,
-        _4_ROUGH_GLOSS
+        _4_ROUGH_GLOSS,
+        _5_HEIGHT_MAP,
+        _6_EMISSION_MAP,
+        _7_ALPHA_MAP
     }
 
     private void Start()
@@ -64,14 +70,22 @@ public class Scr_ChageAspect : MonoBehaviour
         {
             //Create Metallic Mat
             CreateMaterialFrom("_MetallicGlossMap", out metallicSpecMat);
+            //Create Roughness Mat
+            CreateMaterialFrom("_RoughnessMap", out roughnessGlossinessMat); //CHECAR QUE ASI SE LLAME EN SHADER
         }
         else
         {
             CreateMaterialFrom("_SpecGlossMap", out metallicSpecMat);
+            //Create Roughness Mat
+            CreateMaterialFrom("_GloosMap", out roughnessGlossinessMat);
         }
-        
 
-        
+        //Create Height Map
+        CreateMaterialFrom("_ParallaxMap", out heightMat);
+        //Create Alpha Map
+        CreateMaterialFrom("_AlphaMap", out heightMat); //CONFIRMAR QU ESTE SEA EL NOMBRE EN EL SHADER
+        //Create S
+        CreateMaterialFrom("_EmissionMap", out heightMat);
 
         DisplaySubstanceMaterialProperties();
     }
@@ -79,7 +93,8 @@ public class Scr_ChageAspect : MonoBehaviour
     void CreateMaterialFrom(string property, out Material _toAssing)
     {
         _toAssing = new Material(Shader.Find("Standard"));
-        _toAssing.mainTexture = target.GetComponent<Renderer>().material.GetTexture(Shader.PropertyToID(property));
+        if (target.GetComponent<Renderer>().material.GetTexture(Shader.PropertyToID(property)) != null)
+         _toAssing.mainTexture = target.GetComponent<Renderer>().material.GetTexture(Shader.PropertyToID(property));
     }
 
     public void DisplayMap(int option)
@@ -101,6 +116,18 @@ public class Scr_ChageAspect : MonoBehaviour
                     break;
                 case MapOptions._4_ROUGH_GLOSS:
                     target.GetComponent<Renderer>().material = roughnessGlossinessMat;
+                    break;
+                case MapOptions._5_HEIGHT_MAP:
+                    if(heightMat != null)
+                        target.GetComponent<Renderer>().material = heightMat;
+                    break;
+                case MapOptions._6_EMISSION_MAP:
+                    if (emissionMat != null)
+                        target.GetComponent<Renderer>().material = emissionMat;
+                    break;
+                case MapOptions._7_ALPHA_MAP:
+                    if (alphaMat != null)
+                        target.GetComponent<Renderer>().material = alphaMat;
                     break;
             }
         }
@@ -253,7 +280,7 @@ public class Scr_ChageAspect : MonoBehaviour
     {
         if(propertyParent != null)
         {
-            string workflow = "SG";
+            string workflow = "Specular Glossiness";
             specularTggl.SetActive(true);
             glossinessTggl.SetActive(true);
             metallicTggl.SetActive(false);
@@ -263,7 +290,7 @@ public class Scr_ChageAspect : MonoBehaviour
             //For metallic its Standard
             if (substance.shader.name =="Standard")
             {
-                workflow = "MR";
+                workflow = "Metallic Roughness";
                 isMetallicWorkflow = true;
 
                 specularTggl.SetActive(false);
