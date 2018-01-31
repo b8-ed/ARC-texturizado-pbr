@@ -37,6 +37,11 @@ public class Scr_ChageAspect : MonoBehaviour
     public GameObject roughnessTggl;
     public GameObject glossinessTggl;
 
+    [Header("Normal Map")]
+    [Range(10f, 20f)]
+    public float distortion;
+
+
     private bool displayAspect = false;
 
     public enum MapOptions
@@ -163,7 +168,52 @@ public class Scr_ChageAspect : MonoBehaviour
          _toAssing.mainTexture = _child.GetComponent<Renderer>().material.GetTexture(Shader.PropertyToID(property));
 
         if (_isNormal)
+        {
             _toAssing.SetTexture("_BumpMap", _child.GetComponent<Renderer>().material.GetTexture(Shader.PropertyToID("_BumpMap")));
+
+            _toAssing.mainTexture = ToNormalMap(_child.GetComponent<Renderer>().material.GetTexture(Shader.PropertyToID("_BumpMap")));
+        }
+    }
+
+    public static float sCurve(float x, float distortion)
+    {
+        return 1f / (1f + Mathf.Exp(-Mathf.Lerp(5f, 15f, distortion) * (x - 0.5f)));
+    }
+
+    Texture2D ToNormalMap(Texture tex)
+    {
+        Texture2D t = new Texture2D(tex.width, tex.height, TextureFormat.RGBA32, false);
+        RenderTexture currentRT = RenderTexture.active;
+
+        RenderTexture renderTexture = new RenderTexture(tex.width, tex.height, 32);
+        Graphics.Blit(tex, renderTexture);
+
+        RenderTexture.active = renderTexture;
+        t.ReadPixels(new Rect(0, 0, renderTexture.width, renderTexture.height), 0, 0);
+        t.Apply();
+
+        RenderTexture.active = currentRT;
+
+        Texture2D n = new Texture2D(t.width, t.height, TextureFormat.ARGB32, true);
+
+        for (int y = 1; y < t.width - 1; y++)
+        {
+            for (int x = 1; x < t.height * 2 - 1; x++)
+            {
+                float xLeft = t.GetPixel(x - 1, y).grayscale;
+                float xRight = t.GetPixel(x + 1, y).grayscale;
+                float yUp = t.GetPixel(x, y - 1).grayscale;
+                float yDown = t.GetPixel(x, y + 1).grayscale;
+                float xDelta = ((xLeft - xRight) + 1) * .5f;
+                float yDelta = ((yUp - yDown) + 1) * .5f;
+                //n.SetPixel(x,y,new Color(xDelta,yDelta,1f,1f));
+                //if((new Color( Mathf.Clamp01(sCurve(xDelta, distortion)) , Mathf.Clamp01(sCurve(yDelta, distortion)),1f,1.0f)) == Color.white) print(x+ " " + y  );
+                n.SetPixel(x, y, new Color(Mathf.Clamp01(sCurve(xDelta, distortion)), Mathf.Clamp01(sCurve(yDelta, distortion)), 1f, 1.0f));
+            }
+        }
+        n.Apply();
+
+        return n;
     }
 
     public void DisplayMap(int option)
