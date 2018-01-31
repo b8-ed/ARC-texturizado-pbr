@@ -9,7 +9,7 @@ using UnityEngine.SceneManagement;
 public class Scr_ChageAspect : MonoBehaviour
 {
     [Tooltip("El objeto 3d del cual va a tomar los materiales")]
-    public GameObject target; //el padre de los objetos de substance
+    private GameObject target; //el padre de los objetos de substance
     List<ProceduralMaterial> substance = new List<ProceduralMaterial>(); //todos los substance del objeto
 
     //Materiales para almacenar temporalmente el materlial de cada objeto
@@ -22,6 +22,7 @@ public class Scr_ChageAspect : MonoBehaviour
     List<Material> alphaMat = new List<Material>();
     List<Material> emissionMat = new List<Material>();
 
+    [Header("Procedural")]
     [Tooltip("This is a panel with a text and a slider to display a substance property")]
     public GameObject propertyHolderTogglePrefab;
     public GameObject propertyHoldeSliderPrefab;
@@ -50,13 +51,20 @@ public class Scr_ChageAspect : MonoBehaviour
         _7_ALPHA_MAP
     }
 
+    public GameObject myTarget;
+
     private void Start()
     {
-        LoadNewObject(target);
+        LoadNewObject(myTarget);
     }
 
+
+    //Esta funcion se llama cada que se crea un objeto nuevo
     public void LoadNewObject(GameObject parentOfSubstances)
     {
+        //borrar lo que ya haya en la ui para las variables expuestas
+        ClearUI();
+
         target = parentOfSubstances;
         //Sacar cada hijo con un substance
         substance.Clear();
@@ -93,7 +101,7 @@ public class Scr_ChageAspect : MonoBehaviour
 
             //Create Normal Mat
             tempMat = null;
-            CreateMaterialFrom("_BumpMap", out tempMat, child); //_BumpMap
+            CreateMaterialFrom("_BumpMap", out tempMat, child, true); //_BumpMap
             normalMat.Add(tempMat);
 
 
@@ -139,11 +147,23 @@ public class Scr_ChageAspect : MonoBehaviour
         }
     }
 
-    void CreateMaterialFrom(string property, out Material _toAssing, Transform _child)
+    private void ClearUI()
+    {
+        for(int i  = propertyParent.transform.childCount - 1; i >= 0; i--)
+        {
+            if (propertyParent.transform.GetChild(i).name != "txtTitulo")
+                Destroy(propertyParent.transform.GetChild(i).gameObject);
+        }
+    }
+
+    private void CreateMaterialFrom(string property, out Material _toAssing, Transform _child, bool _isNormal = false)
     {
         _toAssing = new Material(Shader.Find("Standard"));
         if (_child.GetComponent<Renderer>().material.GetTexture(Shader.PropertyToID(property)) != null)
          _toAssing.mainTexture = _child.GetComponent<Renderer>().material.GetTexture(Shader.PropertyToID(property));
+
+        if (_isNormal)
+            _toAssing.SetTexture("_BumpMap", _child.GetComponent<Renderer>().material.GetTexture(Shader.PropertyToID("_BumpMap")));
     }
 
     public void DisplayMap(int option)
@@ -188,7 +208,6 @@ public class Scr_ChageAspect : MonoBehaviour
         //cambiar todos sus materiales hijos
         for(int i = 0; i < target.transform.childCount; i++)
         {
-            Debug.Log("Changing material to " + _matToChange[i]);
             target.transform.GetChild(i).GetComponent<Renderer>().material = _matToChange[i];
         }
     }
