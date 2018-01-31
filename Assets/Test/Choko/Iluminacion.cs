@@ -11,6 +11,8 @@ public class Iluminacion : MonoBehaviour {
     public Slider SliderBackLight;
     public Slider SliderKeyLight;
     public Slider SliderFillLight;
+    public Slider SliderRotacionLuces;
+
 
     [Range(0.0f,1.0f)]
     public float IntencidadBackLight;
@@ -75,18 +77,20 @@ public class Iluminacion : MonoBehaviour {
         ColorFillLight[1] = new Color32(255, 221, 0, 255);
         ColorFillLight[2] = new Color32(75, 178, 9, 255);
 
-        ColorLibreBackLight = Color.white;
-        ColorLibreFillLight = Color.white;
-        ColorLibreKeyLight = Color.white;
+        ColorLibreBackLight = new Color32(255, 255, 255, 1);
+        ColorLibreFillLight = new Color32(255, 255, 255, 1);
+        ColorLibreKeyLight = new Color32(255, 255, 255, 1);
 
         cambioColor = false;
 
-        
+        TriadaAlphaDeColoresLuces();
+
 
     }
 
     void Update ()
     {
+        /*
         if (Input.GetKeyDown(KeyCode.A))//cambia las luces a direccional
             CambiarLucesADireccional();
         if (Input.GetKeyDown(KeyCode.S))//cambia las luces a point
@@ -106,7 +110,7 @@ public class Iluminacion : MonoBehaviour {
             TriadaGamaDeColoresLuces();
         if (Input.GetKeyDown(KeyCode.P))
             SeleccionDeColorLibre();
-
+        */
             SeguirObjeto();
     }
 
@@ -194,6 +198,26 @@ public class Iluminacion : MonoBehaviour {
             CambioDeColorLibre();
     }
 
+    public void DropTriadasDeColores(Dropdown _Lista)
+    {
+        switch(_Lista.value)
+        {
+            case 0:
+                TriadaAlphaDeColoresLuces();
+                break;
+            case 1:
+                TriadaBetaDeColoresLuces();
+                break;
+            case 2:
+                TriadaGamaDeColoresLuces();
+                break;
+            case 3:
+                SeleccionDeColorLibre();
+                break;
+
+        }
+    }
+
     //activar Triada de color 1
     void TriadaAlphaDeColoresLuces()
     {
@@ -236,6 +260,41 @@ public class Iluminacion : MonoBehaviour {
         KeyLight.color = ColorLibreKeyLight;
     }
 
+    public void CambioSliderColorLibreKey(GameObject _G)
+    {
+        Slider R = _G.transform.GetChild(0).gameObject.transform.GetChild(0).GetComponent<Slider>();
+        Slider G = _G.transform.GetChild(1).gameObject.transform.GetChild(0).GetComponent<Slider>();
+        Slider B = _G.transform.GetChild(2).gameObject.transform.GetChild(0).GetComponent<Slider>();
+
+        ColorLibreKeyLight.r = (byte)R.value;
+        ColorLibreKeyLight.g = (byte)G.value;
+        ColorLibreKeyLight.b = (byte)B.value;
+        ColorLibreKeyLight.a = 255;
+
+
+    }
+    public void CambioSliderColorLibreFill(GameObject _G)
+    {
+        Slider R = _G.transform.GetChild(0).gameObject.transform.GetChild(0).GetComponent<Slider>();
+        Slider G = _G.transform.GetChild(1).gameObject.transform.GetChild(0).GetComponent<Slider>();
+        Slider B = _G.transform.GetChild(2).gameObject.transform.GetChild(0).GetComponent<Slider>();
+
+        ColorLibreFillLight.r = (byte)R.value;
+        ColorLibreFillLight.g = (byte)G.value;
+        ColorLibreFillLight.b = (byte)B.value;
+        ColorLibreFillLight.a = 255;
+    }
+    public void CambioSliderColorLibreRim(GameObject _G)
+    {
+        Slider R = _G.transform.GetChild(0).gameObject.transform.GetChild(0).GetComponent<Slider>();
+        Slider G = _G.transform.GetChild(1).gameObject.transform.GetChild(0).GetComponent<Slider>();
+        Slider B = _G.transform.GetChild(2).gameObject.transform.GetChild(0).GetComponent<Slider>();
+
+        ColorLibreBackLight.r = (byte)R.value;
+        ColorLibreBackLight.g = (byte)G.value;
+        ColorLibreBackLight.b = (byte)B.value;
+        ColorLibreBackLight.a = 255;
+    }
     //Cambia La Intencidad De las Luces en vace a los valores de las variables
     void CambioDeIntencidad()
     {
@@ -256,5 +315,26 @@ public class Iluminacion : MonoBehaviour {
     public void ControladorDeIntencidadSliderKeyLight()
     {
         IntencidadKeyLight = SliderKeyLight.value;
+    }
+    public void ControladorDeRotacionSlider()
+    {
+        rotation = SliderRotacionLuces.value;
+    }
+
+    public void ControlDeSpotAngle(Slider _s)
+    {
+        f_spotAngle = _s.value;
+    }
+    public void ControlDelRango(Slider _s)
+    {
+        f_range = _s.value;
+    }
+    public void ControlDelRadio(Slider _s)
+    {
+        RadioAlCentro = _s.value;
+    }
+    public void ControlDeAltura(Slider _s)
+    {
+        f_AlturaSet = _s.value;
     }
 }
