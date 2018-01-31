@@ -9,16 +9,18 @@ using UnityEngine.SceneManagement;
 public class Scr_ChageAspect : MonoBehaviour
 {
     [Tooltip("El objeto 3d del cual va a tomar los materiales")]
-    public GameObject target;
-    ProceduralMaterial substance;
-    Material baseMat;
-    Material albedoMat;
-    Material normalMat;
-    Material metallicSpecMat; //this works to save both metallic and specular materials, depending on workflow
-    Material roughnessGlossinessMat; //works for both workflows
-    Material heightMat;
-    Material alphaMat;
-    Material emissionMat;
+    public GameObject target; //el padre de los objetos de substance
+    List<ProceduralMaterial> substance = new List<ProceduralMaterial>(); //todos los substance del objeto
+
+    //Materiales para almacenar temporalmente el materlial de cada objeto
+    List<Material> baseMat = new List<Material>();
+    List<Material> albedoMat = new List<Material>();
+    List<Material> normalMat = new List<Material>();
+    List<Material> metallicSpecMat = new List<Material>(); //this works to save both metallic and specular materials, depending on workflow
+    List<Material> roughnessGlossinessMat = new List<Material>(); //works for both workflows
+    List<Material> heightMat = new List<Material>();
+    List<Material> alphaMat = new List<Material>();
+    List<Material> emissionMat = new List<Material>();
 
     [Tooltip("This is a panel with a text and a slider to display a substance property")]
     public GameObject propertyHolderTogglePrefab;
@@ -50,51 +52,98 @@ public class Scr_ChageAspect : MonoBehaviour
 
     private void Start()
     {
-        substance = target.GetComponent<Renderer>().sharedMaterial as ProceduralMaterial;
-        ProceduralMaterial.substanceProcessorUsage = ProceduralProcessorUsage.All;
-        substance.CacheProceduralProperty("_MainTex", true);
-
-        //Display Material Name
-        DisplayMaterialName();
-
-        //Guardar el material 
-        baseMat = target.GetComponent<Renderer>().material;
-
-        //Creaete albedo Mat
-        CreateMaterialFrom("_MainTex", out albedoMat);
-
-        //Create Normal Mat
-        CreateMaterialFrom("_BumpMap", out normalMat); //_BumpMap
-
-        if (isMetallicWorkflow)
-        {
-            //Create Metallic Mat
-            CreateMaterialFrom("_MetallicGlossMap", out metallicSpecMat);
-            //Create Roughness Mat
-            CreateMaterialFrom("_RoughnessMap", out roughnessGlossinessMat); //CHECAR QUE ASI SE LLAME EN SHADER
-        }
-        else
-        {
-            CreateMaterialFrom("_SpecGlossMap", out metallicSpecMat);
-            //Create Roughness Mat
-            CreateMaterialFrom("_GloosMap", out roughnessGlossinessMat);
-        }
-
-        //Create Height Map
-        CreateMaterialFrom("_ParallaxMap", out heightMat);
-        //Create Alpha Map
-        CreateMaterialFrom("_AlphaMap", out heightMat); //CONFIRMAR QU ESTE SEA EL NOMBRE EN EL SHADER
-        //Create S
-        CreateMaterialFrom("_EmissionMap", out heightMat);
-
-        DisplaySubstanceMaterialProperties();
+        LoadNewObject(target);
     }
 
-    void CreateMaterialFrom(string property, out Material _toAssing)
+    public void LoadNewObject(GameObject parentOfSubstances)
+    {
+        target = parentOfSubstances;
+        //Sacar cada hijo con un substance
+        substance.Clear();
+        baseMat.Clear();
+        albedoMat.Clear();
+        normalMat.Clear();
+        metallicSpecMat.Clear();
+        roughnessGlossinessMat.Clear();
+        heightMat.Clear();
+        alphaMat.Clear();
+        emissionMat.Clear();
+        foreach (Transform child in parentOfSubstances.transform)
+        {
+           
+            //Tomar el substance como material procedural y agregarlo a la lista
+            ProceduralMaterial subTemp = child.GetComponent<Renderer>().sharedMaterial as ProceduralMaterial;
+            ProceduralMaterial.substanceProcessorUsage = ProceduralProcessorUsage.All;
+            subTemp.CacheProceduralProperty("_MainTex", true);
+
+            //Solo se va a checar el workflow con el primer objeto que tenga material
+            if (child.GetSiblingIndex() == 0)
+            {
+                //Display Material Name
+                DisplayMaterialName(subTemp, target.name);
+            }
+
+            //Guardar el material 
+            baseMat.Add(child.GetComponent<Renderer>().material);
+
+            //Creaete albedo Mat
+            Material tempMat;
+            CreateMaterialFrom("_MainTex", out tempMat, child);
+            albedoMat.Add(tempMat);
+
+            //Create Normal Mat
+            tempMat = null;
+            CreateMaterialFrom("_BumpMap", out tempMat, child); //_BumpMap
+            normalMat.Add(tempMat);
+
+
+            if (isMetallicWorkflow)
+            {
+                //Create Metallic Mat
+                tempMat = null;
+                CreateMaterialFrom("_MetallicGlossMap", out tempMat, child);
+                metallicSpecMat.Add(tempMat);
+                //Create Roughness Mat
+                tempMat = null;
+                CreateMaterialFrom("_RoughnessMap", out tempMat, child); //CHECAR QUE ASI SE LLAME EN SHADER
+                roughnessGlossinessMat.Add(tempMat);
+            }
+            else
+            {
+                tempMat = null;
+                CreateMaterialFrom("_SpecGlossMap", out tempMat, child);
+                metallicSpecMat.Add(tempMat);
+                //Create Roughness Mat
+                tempMat = null;
+                CreateMaterialFrom("_GloosMap", out tempMat, child);
+                roughnessGlossinessMat.Add(tempMat);
+            }
+
+            //Create Height Map
+            tempMat = null;
+            CreateMaterialFrom("_ParallaxMap", out tempMat, child);
+            heightMat.Add(tempMat);
+            //Create Alpha Map
+            tempMat = null;
+            CreateMaterialFrom("_AlphaMap", out tempMat, child); //CONFIRMAR QU ESTE SEA EL NOMBRE EN EL SHADER
+            alphaMat.Add(tempMat);
+            tempMat = null;                           //Create S
+            CreateMaterialFrom("_EmissionMap", out tempMat, child);
+            emissionMat.Add(tempMat);
+
+            //Agregar a la UI
+            DisplaySubstanceMaterialProperties(subTemp);
+
+            //Agregar el substance a la lista
+            substance.Add(subTemp);
+        }
+    }
+
+    void CreateMaterialFrom(string property, out Material _toAssing, Transform _child)
     {
         _toAssing = new Material(Shader.Find("Standard"));
-        if (target.GetComponent<Renderer>().material.GetTexture(Shader.PropertyToID(property)) != null)
-         _toAssing.mainTexture = target.GetComponent<Renderer>().material.GetTexture(Shader.PropertyToID(property));
+        if (_child.GetComponent<Renderer>().material.GetTexture(Shader.PropertyToID(property)) != null)
+         _toAssing.mainTexture = _child.GetComponent<Renderer>().material.GetTexture(Shader.PropertyToID(property));
     }
 
     public void DisplayMap(int option)
@@ -106,32 +155,42 @@ public class Scr_ChageAspect : MonoBehaviour
             switch (map)
             {
                 case MapOptions._1_ALBEDO:
-                    target.GetComponent<Renderer>().material = albedoMat;
+                    ChangeMaterialTo(ref albedoMat);
                     break;
                 case MapOptions._2_NORMAL:
-                    target.GetComponent<Renderer>().material = normalMat;
+                    ChangeMaterialTo(ref normalMat); 
                     break;
                 case MapOptions._3_METALLIC_SPECULAR:
-                    target.GetComponent<Renderer>().material = metallicSpecMat;
+                    ChangeMaterialTo(ref metallicSpecMat);
                     break;
                 case MapOptions._4_ROUGH_GLOSS:
-                    target.GetComponent<Renderer>().material = roughnessGlossinessMat;
+                    ChangeMaterialTo(ref roughnessGlossinessMat);
                     break;
                 case MapOptions._5_HEIGHT_MAP:
                     if(heightMat != null)
-                        target.GetComponent<Renderer>().material = heightMat;
+                        ChangeMaterialTo(ref heightMat);
                     break;
                 case MapOptions._6_EMISSION_MAP:
                     if (emissionMat != null)
-                        target.GetComponent<Renderer>().material = emissionMat;
+                        ChangeMaterialTo(ref emissionMat);
                     break;
                 case MapOptions._7_ALPHA_MAP:
                     if (alphaMat != null)
-                        target.GetComponent<Renderer>().material = alphaMat;
+                        ChangeMaterialTo(ref alphaMat);
                     break;
             }
         }
         
+    }
+
+    private void ChangeMaterialTo(ref List<Material> _matToChange)
+    {
+        //cambiar todos sus materiales hijos
+        for(int i = 0; i < target.transform.childCount; i++)
+        {
+            Debug.Log("Changing material to " + _matToChange[i]);
+            target.transform.GetChild(i).GetComponent<Renderer>().material = _matToChange[i];
+        }
     }
     
     public void DisplaySusbtanceMaterial()
@@ -142,17 +201,20 @@ public class Scr_ChageAspect : MonoBehaviour
         }
         else
         {
-            target.GetComponent<Renderer>().material = baseMat;
+            for (int i = 0; i < target.transform.childCount; i++)
+            {
+                target.transform.GetChild(i).GetComponent<Renderer>().material = baseMat[i];
+            }
             displayAspect = false;
         }
     }
 
-    public void ResizeTextures(Dropdown dropdownResize)
+    public void ResizeTextures(Dropdown dropdownResize )
     {
-        //Cambiar la textura principal y el bumpmap
-        string strSize = dropdownResize.options[dropdownResize.value].text;
-        ResizeTextureOfMaterial(baseMat, int.Parse(strSize.ToString()));
-        ResizeTextureOfMaterial(normalMat, int.Parse(strSize.ToString()));
+        ////Cambiar la textura principal y el bumpmap
+        //string strSize = dropdownResize.options[dropdownResize.value].text;
+        //ResizeTextureOfMaterial(baseMat, int.Parse(strSize.ToString()));
+        //ResizeTextureOfMaterial(normalMat, int.Parse(strSize.ToString()));
 
     }
 
@@ -173,35 +235,35 @@ public class Scr_ChageAspect : MonoBehaviour
 
     }
 
-    public void ToggleSubtanceProperty(string inputName)
+    public void ToggleSubtanceProperty(string inputName, ProceduralMaterial mySubstance)
     {
-        bool inputBool = substance.GetProceduralBoolean(inputName);
+        bool inputBool = mySubstance.GetProceduralBoolean(inputName);
         bool oldInputBool = inputBool;
         inputBool = GUILayout.Toggle(inputBool, inputName);
         if (inputBool != oldInputBool)
         {
-            substance.SetProceduralBoolean(inputName, inputBool);
-            substance.RebuildTextures();
+            mySubstance.SetProceduralBoolean(inputName, inputBool);
+            mySubstance.RebuildTextures();
         }
     }
 
-    public void SlideSubstanceProperty(ProceduralPropertyDescription input, Slider slider)
+    public void SlideSubstanceProperty(ProceduralPropertyDescription input, Slider slider, ProceduralMaterial mySubstance)
     {
-        float inputFloat = substance.GetProceduralFloat(input.name);
+        float inputFloat = mySubstance.GetProceduralFloat(input.name);
         float oldInputFloat = inputFloat;
 
         //print("VALUE CHANGED!" + inputFloat + " SLIDER VAL " + slider.value);
         inputFloat = slider.value;//GUILayout.HorizontalSlider(inputFloat, input.minimum, input.maximum);
         if (inputFloat != oldInputFloat)
         {
-            substance.SetProceduralFloat(input.name, inputFloat);
-            substance.RebuildTextures();
+            mySubstance.SetProceduralFloat(input.name, inputFloat);
+            mySubstance.RebuildTextures();
         }
     }
 
-    public void DisplaySubstanceMaterialProperties()
+    public void DisplaySubstanceMaterialProperties(ProceduralMaterial mySubstance)
     {
-        ProceduralPropertyDescription[] inputs = substance.GetProceduralPropertyDescriptions();
+        ProceduralPropertyDescription[] inputs = mySubstance.GetProceduralPropertyDescriptions();
         int i = 0;
         while (i < inputs.Length)
         {
@@ -212,7 +274,7 @@ public class Scr_ChageAspect : MonoBehaviour
             {
                 GameObject holder = GameObject.Instantiate(propertyHolderTogglePrefab, propertyParent.transform);
                 holder.GetComponentInChildren<Toggle>().GetComponentInChildren<Text>().text = input.name;
-                holder.GetComponentInChildren<Toggle>().onValueChanged.AddListener(delegate { ToggleSubtanceProperty(input.name); });
+                holder.GetComponentInChildren<Toggle>().onValueChanged.AddListener(delegate { ToggleSubtanceProperty(input.name, mySubstance); });
 
             }
             //Para variables expuestas flotantes
@@ -221,7 +283,7 @@ public class Scr_ChageAspect : MonoBehaviour
                 {
                     GameObject holder = GameObject.Instantiate(propertyHoldeSliderPrefab, propertyParent.transform);
                     holder.transform.Find("txt").GetComponent<Text>().text = input.name;
-                    holder.GetComponentInChildren<Slider>().onValueChanged.AddListener(delegate { SlideSubstanceProperty(input, holder.GetComponentInChildren<Slider>()); });
+                    holder.GetComponentInChildren<Slider>().onValueChanged.AddListener(delegate { SlideSubstanceProperty(input, holder.GetComponentInChildren<Slider>(), mySubstance); });
                 }
                 else if (type == ProceduralPropertyType.Vector2 || type == ProceduralPropertyType.Vector3 || type == ProceduralPropertyType.Vector4)
                     if (input.hasRange)
@@ -234,7 +296,7 @@ public class Scr_ChageAspect : MonoBehaviour
                         if (type == ProceduralPropertyType.Vector3)
                             vectorComponentAmount = 3;
 
-                        Vector4 inputVector = substance.GetProceduralVector(input.name);
+                        Vector4 inputVector = mySubstance.GetProceduralVector(input.name);
                         Vector4 oldInputVector = inputVector;
                         int c = 0;
                         while (c < vectorComponentAmount)
@@ -243,13 +305,13 @@ public class Scr_ChageAspect : MonoBehaviour
                             c++;
                         }
                         if (inputVector != oldInputVector)
-                            substance.SetProceduralVector(input.name, inputVector);
+                            mySubstance.SetProceduralVector(input.name, inputVector);
                     }
                     else if (type == ProceduralPropertyType.Color3 || type == ProceduralPropertyType.Color4)
                     {
                         GUILayout.Label(input.name);
                         int colorComponentAmount = ((type == ProceduralPropertyType.Color3) ? 3 : 4);
-                        Color colorInput = substance.GetProceduralColor(input.name);
+                        Color colorInput = mySubstance.GetProceduralColor(input.name);
                         Color oldColorInput = colorInput;
                         int d = 0;
                         while (d < colorComponentAmount)
@@ -258,25 +320,25 @@ public class Scr_ChageAspect : MonoBehaviour
                             d++;
                         }
                         if (colorInput != oldColorInput)
-                            substance.SetProceduralColor(input.name, colorInput);
+                            mySubstance.SetProceduralColor(input.name, colorInput);
                     }
                     else if (type == ProceduralPropertyType.Enum)
                     {
                         GUILayout.Label(input.name);
-                        int enumInput = substance.GetProceduralEnum(input.name);
+                        int enumInput = mySubstance.GetProceduralEnum(input.name);
                         int oldEnumInput = enumInput;
                         string[] enumOptions = input.enumOptions;
                         enumInput = GUILayout.SelectionGrid(enumInput, enumOptions, 1);
                         if (enumInput != oldEnumInput)
-                            substance.SetProceduralEnum(input.name, enumInput);
+                            mySubstance.SetProceduralEnum(input.name, enumInput);
                     }
             i++;
         }
-        substance.RebuildTextures();
+        mySubstance.RebuildTextures();
 
     }
 
-    void DisplayMaterialName()
+    void DisplayMaterialName(ProceduralMaterial mySubstance, string objectName)
     {
         if(propertyParent != null)
         {
@@ -288,7 +350,7 @@ public class Scr_ChageAspect : MonoBehaviour
             //Check the workflow from the shader name
             //For Specular its Standard Specular
             //For metallic its Standard
-            if (substance.shader.name =="Standard")
+            if (mySubstance.shader.name =="Standard")
             {
                 workflow = "Metallic Roughness";
                 isMetallicWorkflow = true;
@@ -299,7 +361,7 @@ public class Scr_ChageAspect : MonoBehaviour
                 roughnessTggl.SetActive(true);
             }
 
-            propertyParent.transform.Find("txtTitulo").GetComponent<Text>().text = workflow + ": " + substance.name;
+            propertyParent.transform.Find("txtTitulo").GetComponent<Text>().text = workflow + ": " + objectName;
         }
         
     }

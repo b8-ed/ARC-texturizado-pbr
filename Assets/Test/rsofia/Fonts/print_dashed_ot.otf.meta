@@ -1,0 +1,21 @@
+fileFormatVersion: 2
+guid: 9858ee4ed45f49649b759120b099edbc
+timeCreated: 1517424607
+licenseType: Free
+TrueTypeFontImporter:
+  serializedVersion: 4
+  fontSize: 16
+  forceTextureCase: -2
+  characterSpacing: 0
+  characterPadding: 1
+  includeFontData: 1
+  fontName: Print Dashed OT
+  fontNames:
+  - Print Dashed OT
+  fallbackFontReferences: []
+  customCharacters: 
+  fontRenderingMode: 0
+  ascentCalculationMode: 1
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

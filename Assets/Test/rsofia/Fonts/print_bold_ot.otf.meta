@@ -1,0 +1,21 @@
+fileFormatVersion: 2
+guid: 6559a53d11d4374488fe0b8667e3000b
+timeCreated: 1517424607
+licenseType: Free
+TrueTypeFontImporter:
+  serializedVersion: 4
+  fontSize: 16
+  forceTextureCase: -2
+  characterSpacing: 0
+  characterPadding: 1
+  includeFontData: 1
+  fontName: Print Bold OT
+  fontNames:
+  - Print Bold OT
+  fallbackFontReferences: []
+  customCharacters: 
+  fontRenderingMode: 0
+  ascentCalculationMode: 1
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

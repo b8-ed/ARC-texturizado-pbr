@@ -1,0 +1,21 @@
+fileFormatVersion: 2
+guid: f5bb005534bbd36459e04c443dd4ac67
+timeCreated: 1517424607
+licenseType: Free
+TrueTypeFontImporter:
+  serializedVersion: 4
+  fontSize: 16
+  forceTextureCase: -2
+  characterSpacing: 0
+  characterPadding: 1
+  includeFontData: 1
+  fontName: Print Clearly OT
+  fontNames:
+  - Print Clearly OT
+  fallbackFontReferences: []
+  customCharacters: 
+  fontRenderingMode: 0
+  ascentCalculationMode: 1
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
