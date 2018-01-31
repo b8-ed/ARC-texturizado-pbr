@@ -19,8 +19,8 @@ public class SCR_Creditos : MonoBehaviour
         reader = new StreamReader("Creditos.cts");
         hdr = reader.ReadLine();
         creditos += hdr + "\n\n";
-        num_arte = int.Parse(reader.ReadLine());
         num_progra = int.Parse(reader.ReadLine());
+        num_arte = int.Parse(reader.ReadLine());
 
         creditos += "Programacion:";
         for (int i = 0; i < num_progra; i++)
@@ -31,7 +31,7 @@ public class SCR_Creditos : MonoBehaviour
             for (int j = 0; j < num_acciones; j++)
             {
                 modelo = reader.ReadLine();
-                creditos += modelo + "\n\t";
+                creditos += modelo + "\n\t\t";
             }
         }
         creditos += "\nArte:";
