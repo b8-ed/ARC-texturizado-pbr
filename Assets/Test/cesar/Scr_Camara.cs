@@ -86,6 +86,10 @@ public class Scr_Camara : MonoBehaviour {
         minZoomDistance = 10.0f;
         maxZoomDistance = 50.0f;
     }
+    public void Jugador()
+    {
+        Modo = ModoCamara.USUARIO_MOVIENDO;
+    }
     public void CalculateBounds()
     {
         if (objectToFollow.GetComponentInChildren<MeshRenderer>().bounds.extents.z > objectToFollow.GetComponentInChildren<MeshRenderer>().bounds.extents.x)

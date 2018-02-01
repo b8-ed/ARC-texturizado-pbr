@@ -163,8 +163,15 @@ public class Scr_ChageAspect : MonoBehaviour
     private void CreateMaterialFrom(string property, out Material _toAssing, Transform _child, ProceduralMaterial mySubstance, bool _isNormal = false)
     {
         _toAssing = new Material(Shader.Find("Standard"));
-        if (_child.GetComponent<Renderer>().material.GetTexture(Shader.PropertyToID(property)) != null)
-         _toAssing.mainTexture = mySubstance.GetTexture(Shader.PropertyToID(property));
+        try
+        {
+            //if (_child.GetComponent<Renderer>().material.GetTexture(Shader.PropertyToID(property)) != null)
+                _toAssing.mainTexture = mySubstance.GetTexture(Shader.PropertyToID(property));
+        }
+        catch
+        {
+            Debug.Log("Objeto no tiene propiedad.");
+        }
 
         if (_isNormal)
         {
@@ -217,6 +224,8 @@ public class Scr_ChageAspect : MonoBehaviour
 
     public void DisplayMap(int option)
     {
+        scr_ShaderWF.DesactiveWF();
+
         MapOptions map = (MapOptions)option;
        
         if(displayAspect)

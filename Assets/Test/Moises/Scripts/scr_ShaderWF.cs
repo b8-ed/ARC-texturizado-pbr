@@ -4,63 +4,73 @@ using UnityEngine;
 
 public class scr_ShaderWF : MonoBehaviour {
 
-    public static Shader WF;
-    public static bool IsWf;
-    public static bool wfswitch;
+    public Shader WF;
 
-    public Shader[] normal;
-    MeshRenderer ms;
+    public static List<GameObject> Models;
+    public static List<Shader> Baseshaders;
 
-    public static void InitShSy()
+    void Start()
     {
-        IsWf = false;
-        wfswitch = false;
-        WF = Resources.Load("Shaders/UCLAGameLabWireframe.shader") as Shader;
-        if (WF==null)
-        {
-            Debug.LogWarning("No se encontro el Shader WF");
-        }
+        Models = new List<GameObject>();
+        Baseshaders = new List<Shader>();
     }
 
-    public static void SwitchWF()
+    public static void InitShwf()
     {
-        wfswitch = true;
-    }
-
-	// Use this for initialization
-	void Start () {
-        ms = GetComponent<MeshRenderer>();
-
-        if (ms == null)
-            return;
-
-        normal = new Shader[ms.materials.Length];
-        for (int i=0; i<ms.materials.Length; i++)
+        Models.Clear();
+        Baseshaders.Clear();
+        foreach (MeshRenderer mr in GameObject.FindObjectsOfType<MeshRenderer>())
         {
-            normal[i] = ms.materials[i].shader;
+            Models.Add(mr.gameObject);
         }
+        for (int i = 0; i < Models.Count; i++)
+        {
+            MeshRenderer ms = Models[i].GetComponent<MeshRenderer>();
 
+            if (ms == null)
+                return;
+            for (int j = 0; j < ms.materials.Length; j++)
+            {
+                Baseshaders.Add(ms.materials[j].shader);
+            }
+        }
+        
     }
 	
 	// Update is called once per frame
 	void Update () {
-		if (wfswitch)
+
+	}
+
+    public void ActiveWF()
+    {
+        for (int i = 0; i < Models.Count; i++)
         {
-            wfswitch = false;
-            IsWf = !IsWf;
-            if (IsWf)
+            MeshRenderer ms = Models[i].GetComponent<MeshRenderer>();
+
+            if (ms == null)
+                return;
+            for (int j = 0; j < ms.materials.Length; j++)
             {
-                for (int i = 0; i < ms.materials.Length; i++)
-                {
-                    ms.materials[i].shader = WF;
-                }
-            } else
-            {
-                for (int i = 0; i < ms.materials.Length; i++)
-                {
-                    ms.materials[i].shader = normal[i];
-                }
+                ms.materials[j].shader = WF;
             }
         }
-	}
+    }
+
+    public static void DesactiveWF()
+    {
+        int s = 0;
+        for (int i = 0; i < Models.Count; i++)
+        {
+            MeshRenderer ms = Models[i].GetComponent<MeshRenderer>();
+
+            if (ms == null)
+                return;
+            for (int j = 0; j < ms.materials.Length; j++)
+            {
+                ms.materials[j].shader = Baseshaders[s];
+                s++;
+            }
+        }
+    }
 }

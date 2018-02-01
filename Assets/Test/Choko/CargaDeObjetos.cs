@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class CargaDeObjetos : MonoBehaviour {
 
@@ -12,6 +13,8 @@ public class CargaDeObjetos : MonoBehaviour {
     Scr_Camara scrCam;
 
     public Scr_ChageAspect changeAspect; //script de sofia para lo de los materiales
+    public Text txtNombreAlumno;
+    public Text txtNombreModelo;
 
     void Start ()
     {
@@ -20,6 +23,7 @@ public class CargaDeObjetos : MonoBehaviour {
         instanciaModelos3D = new GameObject[modelos3D.Length];
         CrearObjetos();
         ActivarObjetoActual();
+        scr_ShaderWF.InitShwf();
 	}
     
     void ActivarObjetoActual()
@@ -29,6 +33,7 @@ public class CargaDeObjetos : MonoBehaviour {
         scrCam.CalculateBounds();
 
         changeAspect.LoadNewObject(instanciaModelos3D[indiceObjetoActivo].gameObject);
+        ShowInfo();
     }
     void DesactivarObjetoActual()
     {
@@ -59,8 +64,9 @@ public class CargaDeObjetos : MonoBehaviour {
     /// </summary>
     public void CambiarObjetoActual(int _metodo)
     {
+        scr_ShaderWF.DesactiveWF();
         //Adelanta la seleccion del Objeto Actual
-        if(_metodo == 1)
+        if (_metodo == 1)
         {
             DesactivarObjetoActual();
             if (indiceObjetoActivo < instanciaModelos3D.Length-1)
@@ -68,6 +74,8 @@ public class CargaDeObjetos : MonoBehaviour {
             else
                 indiceObjetoActivo = 0;
             ActivarObjetoActual();
+
+            scr_ShaderWF.InitShwf();
         }
         //Regresa en la seleccion del Objeto Actual
         else if(_metodo == -1)
@@ -78,6 +86,33 @@ public class CargaDeObjetos : MonoBehaviour {
             else
                 indiceObjetoActivo = instanciaModelos3D.Length - 1;
             ActivarObjetoActual();
+
+            scr_ShaderWF.InitShwf();
         }
+    }
+
+    //Funcion que muestra el nombre del modelo y de la personoa que lo modelo en pantalla
+    public void ShowInfo()
+    {
+        string nombreUsuario = instanciaModelos3D[indiceObjetoActivo].gameObject.name;
+        nombreUsuario = nombreUsuario.Replace('_', ' ');
+        string nombreModelo = instanciaModelos3D[indiceObjetoActivo].transform.GetChild(0).name.Replace('_', ' ');
+        int index = 0;
+        if(nombreUsuario.Contains("(Clone)"))
+        {
+            for (int i = 0; i < nombreUsuario.Length; i++)
+            {
+                if (nombreUsuario[i] == '(')
+                {
+                    index = i;
+                    break;
+                }
+            }
+
+            nombreUsuario = nombreUsuario.Remove(index);
+        }
+        
+        txtNombreAlumno.text = nombreUsuario;
+        txtNombreModelo.text = nombreModelo;
     }
 }
