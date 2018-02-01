@@ -11,6 +11,8 @@ public class CargaDeObjetos : MonoBehaviour {
 
     Scr_Camara scrCam;
 
+    public Scr_ChageAspect changeAspect; //script de sofia para lo de los materiales
+
     void Start ()
     {
         scrCam = FindObjectOfType<Scr_Camara>();
@@ -25,6 +27,8 @@ public class CargaDeObjetos : MonoBehaviour {
         instanciaModelos3D[indiceObjetoActivo].gameObject.SetActive(true);
         scrCam.objectToFollow = instanciaModelos3D[indiceObjetoActivo].gameObject;
         scrCam.CalculateBounds();
+
+        changeAspect.LoadNewObject(instanciaModelos3D[indiceObjetoActivo].gameObject);
     }
     void DesactivarObjetoActual()
     {
@@ -42,6 +46,7 @@ public class CargaDeObjetos : MonoBehaviour {
         for (int i = 0; i < modelos3D.Length; i++)
         {
             instanciaModelos3D[i] = Instantiate(modelos3D[i], Vector3.zero, Quaternion.identity);
+            instanciaModelos3D[i].transform.localEulerAngles = new Vector3(-90, 0, 0); //correccion para modelos de max
             instanciaModelos3D[i].AddComponent<SCR_ObjectView>();
             instanciaModelos3D[i].gameObject.SetActive(false);
         }
@@ -58,7 +63,7 @@ public class CargaDeObjetos : MonoBehaviour {
         if(_metodo == 1)
         {
             DesactivarObjetoActual();
-            if (indiceObjetoActivo < instanciaModelos3D.Length)
+            if (indiceObjetoActivo < instanciaModelos3D.Length-1)
                 indiceObjetoActivo++;
             else
                 indiceObjetoActivo = 0;

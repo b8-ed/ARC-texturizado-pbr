@@ -1,20 +1,46 @@
-NombreArchivo de la compa��a.
-2
-2
-Nombre Apellido
+Texturizado de Nueva Generación
+6
+5
+Alain Barragán
 1
-Modulo
-Nombre2 Apellido2
+Créditos
+César Ramírez
+1
+Manipulación Cámara
+Luis Alberto Valera
 2
-Modulo
-Modulo2 
-Nombre Apellido
-2
-Modelo
-Proceso
-Modelo2
+Módulo de Iluminación
+Cargar modelos
+Luis Bernardo Bazán Bravo
+3
+Skybox
+Animación modelos
+Integración
+Moisés Lópiez
+1
+Wireframe
+Ruth Sofía Brown Muñoz
+3
+Módulo de materiales
+Interfaz
+Integración
+Alan Cortés
+1
+Nave
+Proceso1
+Alan García
+1
+Brazo Metal
 Proceso2
-Nombre Apellido2
+Diego Vivanco
 1
-Modelo
+Espada
+Proceso3
+Eric Cuanalo
+1
+Robot
+Proceso4
+Guillermo Crespo
+1
+TSotV BackBlade
 Proceso

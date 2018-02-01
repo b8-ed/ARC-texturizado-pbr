@@ -48,5 +48,7 @@ public class SCR_Creditos : MonoBehaviour
             }
         }
         Credit_txt.text = creditos;
+
+        reader.Close();
     }
 }

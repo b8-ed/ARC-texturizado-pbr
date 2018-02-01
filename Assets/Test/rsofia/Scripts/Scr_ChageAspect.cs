@@ -56,14 +56,6 @@ public class Scr_ChageAspect : MonoBehaviour
         _7_ALPHA_MAP
     }
 
-    public GameObject myTarget;
-
-    private void Start()
-    {
-        LoadNewObject(myTarget);
-    }
-
-
     //Esta funcion se llama cada que se crea un objeto nuevo
     public void LoadNewObject(GameObject parentOfSubstances)
     {
@@ -87,68 +79,75 @@ public class Scr_ChageAspect : MonoBehaviour
             //Tomar el substance como material procedural y agregarlo a la lista
             ProceduralMaterial subTemp = child.GetComponent<Renderer>().sharedMaterial as ProceduralMaterial;
             ProceduralMaterial.substanceProcessorUsage = ProceduralProcessorUsage.All;
-            subTemp.CacheProceduralProperty("_MainTex", true);
-
-            //Solo se va a checar el workflow con el primer objeto que tenga material
-            if (child.GetSiblingIndex() == 0)
+            if (subTemp != null)
             {
-                //Display Material Name
-                DisplayMaterialName(subTemp, target.name);
+                subTemp.CacheProceduralProperty("_MainTex", true);
+
+                //Solo se va a checar el workflow con el primer objeto que tenga material
+                if (child.GetSiblingIndex() == 0)
+                {
+                    //Display Material Name
+                    DisplayMaterialName(subTemp, target.name);
+                }
+
+                //Guardar el material 
+                baseMat.Add(child.GetComponent<Renderer>().material);
+
+                //Creaete albedo Mat
+                Material tempMat;
+                CreateMaterialFrom("_MainTex", out tempMat, child, subTemp);
+                albedoMat.Add(tempMat);
+
+                //Create Normal Mat
+                tempMat = null;
+                CreateMaterialFrom("_BumpMap", out tempMat, child, subTemp, true); //_BumpMap
+                normalMat.Add(tempMat);
+
+
+                if (isMetallicWorkflow)
+                {
+                    //Create Metallic Mat
+                    tempMat = null;
+                    CreateMaterialFrom("_MetallicGlossMap", out tempMat, child, subTemp);
+                    metallicSpecMat.Add(tempMat);
+                    //Create Roughness Mat
+                    tempMat = null;
+                    CreateMaterialFrom("_RoughnessMap", out tempMat, child, subTemp); //CHECAR QUE ASI SE LLAME EN SHADER
+                    roughnessGlossinessMat.Add(tempMat);
+                }
+                else
+                {
+                    tempMat = null;
+                    CreateMaterialFrom("_SpecGlossMap", out tempMat, child, subTemp);
+                    metallicSpecMat.Add(tempMat);
+                    //Create Roughness Mat
+                    tempMat = null;
+                    CreateMaterialFrom("_GloosMap", out tempMat, child, subTemp);
+                    roughnessGlossinessMat.Add(tempMat);
+                }
+
+                //Create Height Map
+                tempMat = null;
+                CreateMaterialFrom("_ParallaxMap", out tempMat, child, subTemp);
+                heightMat.Add(tempMat);
+                //Create Alpha Map
+                tempMat = null;
+                CreateMaterialFrom("_AlphaMap", out tempMat, child, subTemp); //CONFIRMAR QU ESTE SEA EL NOMBRE EN EL SHADER
+                alphaMat.Add(tempMat);
+                tempMat = null;                           //Create S
+                CreateMaterialFrom("_EmissionMap", out tempMat, child, subTemp);
+                emissionMat.Add(tempMat);
+
+                //Agregar a la UI
+                if (subTemp != null)
+                    DisplaySubstanceMaterialProperties(subTemp);
+
+                //Agregar el substance a la lista
+                substance.Add(subTemp);
+
             }
 
-            //Guardar el material 
-            baseMat.Add(child.GetComponent<Renderer>().material);
-
-            //Creaete albedo Mat
-            Material tempMat;
-            CreateMaterialFrom("_MainTex", out tempMat, child);
-            albedoMat.Add(tempMat);
-
-            //Create Normal Mat
-            tempMat = null;
-            CreateMaterialFrom("_BumpMap", out tempMat, child, true); //_BumpMap
-            normalMat.Add(tempMat);
-
-
-            if (isMetallicWorkflow)
-            {
-                //Create Metallic Mat
-                tempMat = null;
-                CreateMaterialFrom("_MetallicGlossMap", out tempMat, child);
-                metallicSpecMat.Add(tempMat);
-                //Create Roughness Mat
-                tempMat = null;
-                CreateMaterialFrom("_RoughnessMap", out tempMat, child); //CHECAR QUE ASI SE LLAME EN SHADER
-                roughnessGlossinessMat.Add(tempMat);
-            }
-            else
-            {
-                tempMat = null;
-                CreateMaterialFrom("_SpecGlossMap", out tempMat, child);
-                metallicSpecMat.Add(tempMat);
-                //Create Roughness Mat
-                tempMat = null;
-                CreateMaterialFrom("_GloosMap", out tempMat, child);
-                roughnessGlossinessMat.Add(tempMat);
-            }
-
-            //Create Height Map
-            tempMat = null;
-            CreateMaterialFrom("_ParallaxMap", out tempMat, child);
-            heightMat.Add(tempMat);
-            //Create Alpha Map
-            tempMat = null;
-            CreateMaterialFrom("_AlphaMap", out tempMat, child); //CONFIRMAR QU ESTE SEA EL NOMBRE EN EL SHADER
-            alphaMat.Add(tempMat);
-            tempMat = null;                           //Create S
-            CreateMaterialFrom("_EmissionMap", out tempMat, child);
-            emissionMat.Add(tempMat);
-
-            //Agregar a la UI
-            DisplaySubstanceMaterialProperties(subTemp);
-
-            //Agregar el substance a la lista
-            substance.Add(subTemp);
+           
         }
     }
 
@@ -161,17 +160,17 @@ public class Scr_ChageAspect : MonoBehaviour
         }
     }
 
-    private void CreateMaterialFrom(string property, out Material _toAssing, Transform _child, bool _isNormal = false)
+    private void CreateMaterialFrom(string property, out Material _toAssing, Transform _child, ProceduralMaterial mySubstance, bool _isNormal = false)
     {
         _toAssing = new Material(Shader.Find("Standard"));
         if (_child.GetComponent<Renderer>().material.GetTexture(Shader.PropertyToID(property)) != null)
-         _toAssing.mainTexture = _child.GetComponent<Renderer>().material.GetTexture(Shader.PropertyToID(property));
+         _toAssing.mainTexture = mySubstance.GetTexture(Shader.PropertyToID(property));
 
         if (_isNormal)
         {
-            _toAssing.SetTexture("_BumpMap", _child.GetComponent<Renderer>().material.GetTexture(Shader.PropertyToID("_BumpMap")));
+            _toAssing.SetTexture("_BumpMap", mySubstance.GetTexture(Shader.PropertyToID("_BumpMap")));
 
-            _toAssing.mainTexture = ToNormalMap(_child.GetComponent<Renderer>().material.GetTexture(Shader.PropertyToID("_BumpMap")));
+            _toAssing.mainTexture = ToNormalMap(mySubstance.GetTexture(Shader.PropertyToID("_BumpMap")));
         }
     }
 
@@ -228,7 +227,7 @@ public class Scr_ChageAspect : MonoBehaviour
                     ChangeMaterialTo(ref albedoMat);
                     break;
                 case MapOptions._2_NORMAL:
-                    ChangeMaterialTo(ref normalMat); 
+                    ChangeMaterialTo(ref normalMat, true); 
                     break;
                 case MapOptions._3_METALLIC_SPECULAR:
                     ChangeMaterialTo(ref metallicSpecMat);
@@ -253,12 +252,18 @@ public class Scr_ChageAspect : MonoBehaviour
         
     }
 
-    private void ChangeMaterialTo(ref List<Material> _matToChange)
+    private void ChangeMaterialTo(ref List<Material> _matToChange, bool isNormal = false)
     {
         //cambiar todos sus materiales hijos
         for(int i = 0; i < target.transform.childCount; i++)
         {
-            target.transform.GetChild(i).GetComponent<Renderer>().material = _matToChange[i];
+            if(!isNormal)
+             target.transform.GetChild(i).GetComponent<Renderer>().material = _matToChange[i];
+            else
+            {                 
+                _matToChange[i].mainTexture = ToNormalMap(substance[i].GetTexture(Shader.PropertyToID("_BumpMap")));
+                target.transform.GetChild(i).GetComponent<Renderer>().material = _matToChange[i];
+            }
         }
     }
     
@@ -407,7 +412,7 @@ public class Scr_ChageAspect : MonoBehaviour
 
     }
 
-    void DisplayMaterialName(ProceduralMaterial mySubstance, string objectName)
+    void DisplayMaterialName(Material mySubstance, string objectName)
     {
         if(propertyParent != null)
         {

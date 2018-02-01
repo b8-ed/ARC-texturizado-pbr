@@ -42,7 +42,6 @@ public class Scr_UIController : MonoBehaviour
             else
             {
                 TurnOnMainUI();
-                TurnOffOtherMenus();
             }
         }
 
@@ -72,8 +71,9 @@ public class Scr_UIController : MonoBehaviour
     }
 
     //Funcion que prende unicamente la interfaz principal
-    private void TurnOnMainUI()
+    public void TurnOnMainUI()
     {
+        TurnOffOtherMenus();
         foreach(GameObject obj in otrasInterfaces)
         {
             obj.SetActive(false);

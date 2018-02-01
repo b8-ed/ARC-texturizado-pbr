@@ -6,8 +6,8 @@ public class SCR_ObjectView : MonoBehaviour
 {
 
     public float TurnX;
-    public float TurnY = 90.0f;
-    public float TurnZ;
+    public float TurnY;
+    public float TurnZ = 90.0f;
 
     public float MoveX;
     public float MoveY;
