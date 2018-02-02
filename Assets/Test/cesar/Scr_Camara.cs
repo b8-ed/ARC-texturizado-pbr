@@ -16,7 +16,7 @@ public class Scr_Camara : MonoBehaviour {
     public float mouseZoomMultiplier = 5.0f;
 
     [Header("Limites")]
-    public float minZoomDistance = 10.0f;
+    public float minZoomDistance = 5.0f;
     public float maxZoomDistance = 50.0f;
 
     public bool correctZoomingOutRatio = true;

@@ -13,49 +13,81 @@ public class SCR_ObjectView : MonoBehaviour
     public float MoveY;
     public float MoveZ;
 
-    public bool World;
+    public bool World = true;
     bool subiendo = true;
     Vector3 startPos;
     Vector3 endPos;
 
-    void Start()
+    bool isAnimOn = false;
+
+    public Transform targetObject;
+
+    public void Init(Transform _target)
     {
-        startPos = transform.position;
-        endPos = new Vector3(transform.position.x + MoveX, transform.position.y + MoveY, transform.position.z + MoveZ);
+        //isAnimOn = false;
+        targetObject = _target;
+        startPos = targetObject.position;
+        endPos = new Vector3(targetObject.position.x + MoveX, targetObject.position.y + MoveY, targetObject.position.z + MoveZ);
     }
 
     // Update is called once per frame
     void Update()
     {
-
-        if (World == true)
+        if (targetObject == null)
+            return;
+        if(isAnimOn)
         {
-            transform.Rotate(TurnX * Time.deltaTime, TurnY * Time.deltaTime, TurnZ * Time.deltaTime, Space.World);
-            //transform.Translate(MoveX * Time.deltaTime, MoveY * Time.deltaTime, MoveZ * Time.deltaTime, Space.World);
-
-            if (subiendo == true)
+            if (World == true)
             {
-                transform.position = Vector3.Lerp(startPos, endPos, Time.time);
-                if (transform.position == endPos)
-                {
-                    subiendo = false;
-                }
-            }
+                targetObject.Rotate(TurnX * Time.deltaTime, TurnY * Time.deltaTime, TurnZ * Time.deltaTime, Space.World);
+                //transform.Translate(MoveX * Time.deltaTime, MoveY * Time.deltaTime, MoveZ * Time.deltaTime, Space.World);
 
+                if (subiendo == true)
+                {
+                    targetObject.position = Vector3.Lerp(startPos, endPos, Time.time);
+                    if (targetObject.position == endPos)
+                    {
+                        subiendo = false;
+                    }
+                }
+
+                else
+                {
+                    targetObject.position = Vector3.Lerp(endPos, startPos, Time.time);
+                    if (targetObject.position == startPos)
+                    {
+                        subiendo = true;
+                    }
+                }
+
+            }
             else
             {
-                transform.position = Vector3.Lerp(endPos, startPos, Time.time);
-                if (transform.position == startPos)
-                {
-                    subiendo = true;
-                }
+                targetObject.Rotate(TurnX * Time.deltaTime, TurnY * Time.deltaTime, TurnZ * Time.deltaTime, Space.Self);
+                targetObject.Translate(MoveX * Time.deltaTime, MoveY * Time.deltaTime, MoveZ * Time.deltaTime, Space.Self);
             }
-
-        }
-        else
-        {
-            transform.Rotate(TurnX * Time.deltaTime, TurnY * Time.deltaTime, TurnZ * Time.deltaTime, Space.Self);
-            transform.Translate(MoveX * Time.deltaTime, MoveY * Time.deltaTime, MoveZ * Time.deltaTime, Space.Self);
-        }
+        }        
     }
+
+    public void ToggleAnimation(UnityEngine.UI.Text btnText)
+    {
+        isAnimOn = !isAnimOn;
+        if (isAnimOn)
+            btnText.text = "Animación activa";
+        else
+            btnText.text = "Animación desactivada";
+        Debug.Log("Animation " + isAnimOn);
+    }
+
+    public void RotateRight()
+    {
+        TurnZ = -90;
+    }
+
+    public void RotateLeft()
+    {
+        TurnZ = 90;
+    }
+
+
 }

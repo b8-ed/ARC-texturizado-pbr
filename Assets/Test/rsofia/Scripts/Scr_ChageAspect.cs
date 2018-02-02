@@ -36,6 +36,7 @@ public class Scr_ChageAspect : MonoBehaviour
     public GameObject metallicTggl;
     public GameObject roughnessTggl;
     public GameObject glossinessTggl;
+    public Toggle[] togglesToTurnOff;
 
     [Header("Normal Map")]
     [Range(10f, 20f)]
@@ -258,6 +259,13 @@ public class Scr_ChageAspect : MonoBehaviour
                     break;
             }
         }
+        else
+        {
+            foreach(Toggle toggle in togglesToTurnOff)
+            {
+                toggle.isOn = false;
+            }
+        }
         
     }
 
@@ -284,10 +292,16 @@ public class Scr_ChageAspect : MonoBehaviour
         }
         else
         {
+            foreach (Toggle toggle in togglesToTurnOff)
+            {
+                toggle.isOn = false;
+            }
+
             for (int i = 0; i < target.transform.childCount; i++)
             {
                 target.transform.GetChild(i).GetComponent<Renderer>().material = baseMat[i];
-            }
+            }            
+
             displayAspect = false;
         }
     }

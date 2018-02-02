@@ -33,6 +33,7 @@ public class CargaDeObjetos : MonoBehaviour {
         scrCam.CalculateBounds();
 
         changeAspect.LoadNewObject(instanciaModelos3D[indiceObjetoActivo].gameObject);
+        FindObjectOfType<SCR_ObjectView>().Init(instanciaModelos3D[indiceObjetoActivo].transform);
         ShowInfo();
     }
     void DesactivarObjetoActual()
@@ -52,7 +53,7 @@ public class CargaDeObjetos : MonoBehaviour {
         {
             instanciaModelos3D[i] = Instantiate(modelos3D[i], Vector3.zero, Quaternion.identity);
             instanciaModelos3D[i].transform.localEulerAngles = new Vector3(-90, 0, 0); //correccion para modelos de max
-            instanciaModelos3D[i].AddComponent<SCR_ObjectView>();
+            //instanciaModelos3D[i].AddComponent<SCR_ObjectView>();
             instanciaModelos3D[i].gameObject.SetActive(false);
         }
     }
