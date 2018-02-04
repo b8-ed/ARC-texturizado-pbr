@@ -1,14 +1,14 @@
 fileFormatVersion: 2
-guid: 530124001c01ffa4382971426f68b76a
-timeCreated: 1517728820
+guid: 904bc937abc21e8449ffd5306f0810fd
+timeCreated: 1517771142
 licenseType: Free
 SubstanceImporter:
   externalObjects: {}
   serializedVersion: 5
   materialInstances:
   - serializedVersion: 16
-    name: Techo_ID2
-    prototypeName: Techo_ID2
+    name: ESPADA_MAT1
+    prototypeName: ESPADA_MAT1
     shaderName: 
     shader: {fileID: 46, guid: 0000000000000000f000000000000000, type: 0}
     shaderKeywords: 
@@ -28,31 +28,47 @@ SubstanceImporter:
       floats: []
       colors: []
     textureParameters:
-    - name: Techo_ID2_basecolor
+    - name: ESPADA_MAT1_basecolor
       alphaSource: 6
       filterMode: 1
       aniso: 1
       wrapMode: 0
-    - name: Techo_ID2_normal
+    - name: ESPADA_MAT1_normal
       alphaSource: 0
       filterMode: 1
       aniso: 1
       wrapMode: 0
-    - name: Techo_ID2_metallic
+    - name: ESPADA_MAT1_metallic
       alphaSource: 7
+      filterMode: 1
+      aniso: 1
+      wrapMode: 0
+    - name: ESPADA_MAT1_AO
+      alphaSource: 0
+      filterMode: 1
+      aniso: 1
+      wrapMode: 0
+    - name: ESPADA_MAT1_Emissive
+      alphaSource: 0
       filterMode: 1
       aniso: 1
       wrapMode: 0
     textureAssignments:
     - shaderProp: _MainTex
       material: {instanceID: 0}
-      baseUID: 1046381596
+      baseUID: 3817901244
     - shaderProp: _BumpMap
       material: {instanceID: 0}
-      baseUID: 1046381598
+      baseUID: 3817901246
+    - shaderProp: _EmissionMap
+      material: {instanceID: 0}
+      baseUID: 3855732214
     - shaderProp: _MetallicGlossMap
       material: {instanceID: 0}
-      baseUID: 1046381594
+      baseUID: 3817901242
+    - shaderProp: _OcclusionMap
+      material: {instanceID: 0}
+      baseUID: 3855273812
     buildTargetSettings:
     - serializedVersion: 2
       buildTarget: 

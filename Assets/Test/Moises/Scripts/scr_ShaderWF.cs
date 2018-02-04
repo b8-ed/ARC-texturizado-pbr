@@ -17,9 +17,15 @@ public class scr_ShaderWF : MonoBehaviour {
 
     public static void InitShwf()
     {
-        Models.Clear();
-        Baseshaders.Clear();
-        foreach (MeshRenderer mr in GameObject.FindObjectsOfType<MeshRenderer>())
+        if (Models != null)
+            Models.Clear();
+        else
+            Models = new List<GameObject>();
+        if (Baseshaders != null)
+            Baseshaders.Clear();
+        else
+            Baseshaders = new List<Shader>();
+        foreach (MeshRenderer mr in FindObjectsOfType<MeshRenderer>())
         {
             Models.Add(mr.gameObject);
         }
@@ -37,11 +43,6 @@ public class scr_ShaderWF : MonoBehaviour {
         
     }
 	
-	// Update is called once per frame
-	void Update () {
-
-	}
-
     public void ActiveWF()
     {
         for (int i = 0; i < Models.Count; i++)
