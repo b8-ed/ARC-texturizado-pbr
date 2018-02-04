@@ -18,5 +18,6 @@ public class Scr_Tutorial : MonoBehaviour
     public void TurnOnTutorial()
     {
         tutorial.SetActive(true);
+        tutorial.GetComponent<Animator>().SetBool("Tutorial", true);
     }
 }
