@@ -19,9 +19,10 @@ public class SCR_SkyboxManager : MonoBehaviour {
 	}
 	
     public void SetSkybox(int index)
-    {
+    {        
         localIndex = index;
-        RenderSettings.skybox = MAT_Skybox[index];
+        if (isSkyboxOn)
+            RenderSettings.skybox = MAT_Skybox[index];
     }
 
     public void RotateSkybox(float value)
