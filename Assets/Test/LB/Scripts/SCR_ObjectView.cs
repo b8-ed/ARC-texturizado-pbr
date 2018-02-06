@@ -22,6 +22,13 @@ public class SCR_ObjectView : MonoBehaviour
 
     public Transform targetObject;
 
+    private float rotValue = 0.0f;
+
+    private void Start()
+    {
+        rotValue = TurnZ;
+    }
+
     public void Init(Transform _target)
     {
         //isAnimOn = false;
@@ -81,12 +88,12 @@ public class SCR_ObjectView : MonoBehaviour
 
     public void RotateRight()
     {
-        TurnZ = -90;
+        TurnZ = -rotValue;
     }
 
     public void RotateLeft()
     {
-        TurnZ = 90;
+        TurnZ = rotValue;
     }
 
 

@@ -30,7 +30,7 @@ public class CargaDeObjetos : MonoBehaviour {
     {
         instanciaModelos3D[indiceObjetoActivo].gameObject.SetActive(true);
         scrCam.objectToFollow = instanciaModelos3D[indiceObjetoActivo].gameObject;
-        scrCam.CalculateBounds();
+        //scrCam.CalculateBounds();
 
         changeAspect.LoadNewObject(instanciaModelos3D[indiceObjetoActivo].gameObject);
         FindObjectOfType<SCR_ObjectView>().Init(instanciaModelos3D[indiceObjetoActivo].transform);

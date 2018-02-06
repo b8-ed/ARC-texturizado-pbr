@@ -491,11 +491,11 @@ public class Scr_ChageAspect : MonoBehaviour
 
     }
 
-    public void ToggleSubtanceProperty(string inputName, ProceduralMaterial mySubstance)
+    public void ToggleSubtanceProperty(string inputName, ProceduralMaterial mySubstance, Toggle tggl)
     {
         bool inputBool = mySubstance.GetProceduralBoolean(inputName);
         bool oldInputBool = inputBool;
-        inputBool = GUILayout.Toggle(inputBool, inputName);
+        inputBool = tggl.isOn; // GUILayout.Toggle(inputBool, inputName);
         if (inputBool != oldInputBool)
         {
             mySubstance.SetProceduralBoolean(inputName, inputBool);
@@ -530,7 +530,7 @@ public class Scr_ChageAspect : MonoBehaviour
             {
                 GameObject holder = GameObject.Instantiate(propertyHolderTogglePrefab, propertyParent.transform);
                 holder.GetComponentInChildren<Toggle>().GetComponentInChildren<Text>().text = input.label;
-                holder.GetComponentInChildren<Toggle>().onValueChanged.AddListener(delegate { ToggleSubtanceProperty(input.name, mySubstance); });
+                holder.GetComponentInChildren<Toggle>().onValueChanged.AddListener(delegate { ToggleSubtanceProperty(input.name, mySubstance, holder.GetComponentInChildren<Toggle>()); });
 
             }
             //Para variables expuestas flotantes
